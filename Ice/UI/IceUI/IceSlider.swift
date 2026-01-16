@@ -48,12 +48,15 @@ struct IceSlider<Value: BinaryFloatingPoint, ValueLabel: View, ValueLabelSelecta
         CompactSlider(
             value: value,
             in: bounds,
-            step: step,
-            handleVisibility: .hovering(width: 1)
-        ) {
+            step: step
+        )
+        .overlay(alignment: .leading) {
             valueLabel
                 .textSelection(valueLabelSelectability)
+                .padding(.horizontal, 8)
+                .allowsHitTesting(false)
         }
-        .compactSliderDisabledHapticFeedback(true)
+        .frame(minHeight: 24)
     }
 }
+

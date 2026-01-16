@@ -9,7 +9,7 @@ Ice is a powerful menu bar management tool. While its primary function is hiding
 
 [![Download](https://img.shields.io/badge/download-latest-brightgreen?style=flat-square)](https://github.com/jordanbaird/Ice/releases/latest)
 ![Platform](https://img.shields.io/badge/platform-macOS-blue?style=flat-square)
-![Requirements](https://img.shields.io/badge/requirements-macOS%2014%2B-fa4e49?style=flat-square)
+![Requirements](https://img.shields.io/badge/requirements-macOS%2026%2B-fa4e49?style=flat-square)
 [![Sponsor](https://img.shields.io/badge/Sponsor%20%E2%9D%A4%EF%B8%8F-8A2BE2?style=flat-square)](https://github.com/sponsors/jordanbaird)
 [![Website](https://img.shields.io/badge/Website-015FBA?style=flat-square)](https://icemenubar.app)
 [![License](https://img.shields.io/github/license/jordanbaird/Ice?style=flat-square)](LICENSE)
@@ -81,9 +81,9 @@ brew install --cask jordanbaird-ice
 - [x] Automatic updates
 - [ ] Menu bar widgets
 
-## Why does Ice only support macOS 14 and later?
+## Why does Ice only support macOS 26 and later?
 
-Ice uses a number of system APIs that are available starting in macOS 14. As such, there are no plans to support earlier versions of macOS.
+Ice uses a number of system APIs that are available starting in macOS 26. As such, there are no plans to support earlier versions of macOS.
 
 ## Gallery
 

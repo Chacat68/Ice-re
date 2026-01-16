@@ -45,30 +45,86 @@ enum ScreenCapture {
 
     /// Requests screen capture permissions.
     static func requestPermissions() {
-        if #available(macOS 15.0, *) {
-            // CGRequestScreenCaptureAccess() is broken on macOS 15. SCShareableContent requires
-            // screen capture permissions, and triggers a request if the user doesn't have them.
-            SCShareableContent.getWithCompletionHandler { _, _ in }
-        } else {
-            CGRequestScreenCaptureAccess()
-        }
+        // SCShareableContent requires screen capture permissions, and triggers a request
+        // if the user doesn't have them.
+        SCShareableContent.getWithCompletionHandler { _, _ in }
     }
 
-    /// Captures a composite image of an array of windows.
+    /// Captures a composite image of an array of windows using ScreenCaptureKit.
     ///
     /// - Parameters:
     ///   - windowIDs: The identifiers of the windows to capture.
     ///   - screenBounds: The bounds to capture. Pass `nil` to capture the minimum rectangle that encloses the windows.
     ///   - option: Options that specify the image to be captured.
     static func captureWindows(_ windowIDs: [CGWindowID], screenBounds: CGRect? = nil, option: CGWindowImageOption = []) -> CGImage? {
-        let pointer = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: windowIDs.count)
-        for (index, windowID) in windowIDs.enumerated() {
-            pointer[index] = UnsafeRawPointer(bitPattern: UInt(windowID))
-        }
-        guard let windowArray = CFArrayCreate(kCFAllocatorDefault, pointer, windowIDs.count, nil) else {
+        guard !windowIDs.isEmpty else {
             return nil
         }
-        return .windowListImage(from: screenBounds ?? .null, windowArray: windowArray, imageOption: option)
+
+        // Use ScreenCaptureKit for capturing windows
+        var resultImage: CGImage?
+        let semaphore = DispatchSemaphore(value: 0)
+
+        Task {
+            do {
+                let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: false)
+
+                // Find the SCWindow objects that match our window IDs
+                let targetWindows = content.windows.filter { window in
+                    windowIDs.contains(CGWindowID(window.windowID))
+                }
+
+                guard !targetWindows.isEmpty else {
+                    semaphore.signal()
+                    return
+                }
+
+                // For multiple windows, we need to capture each and composite them
+                if targetWindows.count == 1, let window = targetWindows.first {
+                    // Single window capture
+                    let filter = SCContentFilter(desktopIndependentWindow: window)
+                    let config = SCStreamConfiguration()
+                    config.width = Int(window.frame.width * 2) // Retina
+                    config.height = Int(window.frame.height * 2)
+                    config.showsCursor = false
+                    config.captureResolution = .best
+
+                    resultImage = try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
+                } else {
+                    // Multiple windows - capture the display region containing all windows
+                    // Calculate the bounding rect for all windows
+                    var unionRect = CGRect.null
+                    for window in targetWindows {
+                        unionRect = unionRect.union(window.frame)
+                    }
+
+                    if let display = content.displays.first {
+                        // Create a filter for the display with only the target windows
+                        let filter = SCContentFilter(display: display, including: targetWindows)
+                        let config = SCStreamConfiguration()
+
+                        let bounds = screenBounds ?? unionRect
+                        config.width = Int(bounds.width * 2)
+                        config.height = Int(bounds.height * 2)
+                        config.showsCursor = false
+                        config.captureResolution = .best
+
+                        if screenBounds != nil {
+                            config.sourceRect = bounds
+                        }
+
+                        resultImage = try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
+                    }
+                }
+            } catch {
+                Logger.screenCapture.error("ScreenCaptureKit capture failed: \(error.localizedDescription)")
+            }
+            semaphore.signal()
+        }
+
+        // Wait for async capture to complete (with timeout)
+        _ = semaphore.wait(timeout: .now() + 5.0)
+        return resultImage
     }
 
     /// Captures an image of a window.
@@ -82,18 +138,8 @@ enum ScreenCapture {
     }
 }
 
-/// A protocol used to suppress deprecation warnings for the `CGWindowList` screen capture APIs.
-///
-/// ScreenCaptureKit doesn't support capturing composite images of offscreen menu bar items, but
-/// this should be replaced once it does.
-private protocol WindowListImage {
-    init?(windowListFromArrayScreenBounds: CGRect, windowArray: CFArray, imageOption: CGWindowImageOption)
+// MARK: - Logger
+private extension Logger {
+    static let screenCapture = Logger(category: "ScreenCapture")
 }
 
-private extension WindowListImage {
-    static func windowListImage(from screenBounds: CGRect, windowArray: CFArray, imageOption: CGWindowImageOption) -> Self? {
-        Self(windowListFromArrayScreenBounds: screenBounds, windowArray: windowArray, imageOption: imageOption)
-    }
-}
-
-extension CGImage: WindowListImage { }
