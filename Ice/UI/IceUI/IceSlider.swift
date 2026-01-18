@@ -45,18 +45,22 @@ struct IceSlider<Value: BinaryFloatingPoint, ValueLabel: View, ValueLabelSelecta
     }
 
     var body: some View {
-        CompactSlider(
-            value: value,
-            in: bounds,
-            step: step
-        )
-        .overlay(alignment: .leading) {
-            valueLabel
-                .textSelection(valueLabelSelectability)
-                .padding(.horizontal, 8)
-                .allowsHitTesting(false)
+        GeometryReader { proxy in
+            if proxy.size.width > 0 {
+                CompactSlider(
+                    value: value,
+                    in: bounds,
+                    step: step
+                )
+                .overlay(alignment: .leading) {
+                    valueLabel
+                        .textSelection(valueLabelSelectability)
+                        .padding(.horizontal, 8)
+                        .allowsHitTesting(false)
+                }
+            }
         }
-        .frame(minHeight: 24)
+        .frame(minWidth: 100, maxWidth: .infinity)
+        .frame(height: 24)
     }
 }
-

@@ -91,6 +91,7 @@ final class LayoutBarItemView: NSView {
 
         if let appState {
             appState.imageCache.$images
+                .receive(on: DispatchQueue.main)
                 .sink { [weak self] images in
                     guard
                         let self,
@@ -98,7 +99,9 @@ final class LayoutBarItemView: NSView {
                     else {
                         return
                     }
-                    image = NSImage(cgImage: cgImage, size: CGSize(width: cgImage.width, height: cgImage.height))
+                    DispatchQueue.main.async {
+                        self.image = NSImage(cgImage: cgImage, size: CGSize(width: cgImage.width, height: cgImage.height))
+                    }
                 }
                 .store(in: &c)
         }

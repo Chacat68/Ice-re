@@ -2,6 +2,18 @@
 //  Private.swift
 //  Ice
 //
+//  This file contains shims for private Apple APIs used for menu bar management.
+//  These APIs are not officially documented and may change without notice.
+//
+//  API Categories:
+//  - CGSConnection: Window server connection management
+//  - CGSSpace: Desktop spaces management (fullscreen detection, etc.)
+//  - CGSWindow: Window list and frame management
+//
+//  Note: These APIs have been stable since macOS 10.x and continue to work in
+//  macOS 26. They are essential for Ice's core functionality and have no
+//  official public API alternatives.
+//
 
 import CoreGraphics
 
@@ -32,6 +44,8 @@ struct CGSSpaceMask: OptionSet {
 }
 
 // MARK: - CGSConnection Functions
+// Used for managing the connection to the window server.
+// Essential for all other CGS operations.
 
 @_silgen_name("CGSMainConnectionID")
 func CGSMainConnectionID() -> CGSConnectionID
@@ -53,6 +67,8 @@ func CGSSetConnectionProperty(
 ) -> CGError
 
 // MARK: - CGSEvent Functions
+// Used for detecting unresponsive applications.
+// Required by Bridging.responsivity(for:) as a fallback mechanism.
 
 @_silgen_name("CGSEventIsAppUnresponsive")
 func CGSEventIsAppUnresponsive(
@@ -61,6 +77,8 @@ func CGSEventIsAppUnresponsive(
 ) -> Bool
 
 // MARK: - CGSSpace Functions
+// Used for detecting fullscreen spaces and managing window-to-space mapping.
+// Essential for proper menu bar behavior in fullscreen apps.
 
 @_silgen_name("CGSGetActiveSpace")
 func CGSGetActiveSpace(_ cid: CGSConnectionID) -> CGSSpaceID
@@ -79,6 +97,8 @@ func CGSSpaceGetType(
 ) -> CGSSpaceType
 
 // MARK: - CGSWindow Functions
+// Used for getting window lists and window information.
+// Essential for menu bar item management and positioning.
 
 @_silgen_name("CGSGetWindowList")
 func CGSGetWindowList(

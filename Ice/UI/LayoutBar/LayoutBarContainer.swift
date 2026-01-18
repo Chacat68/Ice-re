@@ -90,21 +90,27 @@ final class LayoutBarContainer: NSView {
         if let appState {
             appState.itemManager.$itemCache
                 .removeDuplicates()
+                .receive(on: DispatchQueue.main)
                 .sink { [weak self] cache in
                     guard let self else {
                         return
                     }
-                    setArrangedViews(items: cache.managedItems(for: section.name))
+                    DispatchQueue.main.async {
+                        self.setArrangedViews(items: cache.managedItems(for: self.section.name))
+                    }
                 }
                 .store(in: &c)
 
             appState.imageCache.$images
                 .removeDuplicates()
+                .receive(on: DispatchQueue.main)
                 .sink { [weak self] _ in
                     guard let self else {
                         return
                     }
-                    layoutArrangedViews()
+                    DispatchQueue.main.async {
+                        self.layoutArrangedViews()
+                    }
                 }
                 .store(in: &c)
         }

@@ -14,26 +14,11 @@ extension View {
     func layoutBarStyle(appState: AppState, averageColorInfo: MenuBarAverageColorInfo?) -> some View {
         background {
             if appState.isActiveSpaceFullscreen {
-                Color.black
-            } else if let averageColorInfo {
-                switch averageColorInfo.source {
-                case .menuBarWindow:
-                    Color(cgColor: averageColorInfo.color)
-                        .overlay(
-                            Material.bar
-                                .opacity(0.2)
-                                .blendMode(.softLight)
-                        )
-                case .desktopWallpaper:
-                    Color(cgColor: averageColorInfo.color)
-                        .overlay(
-                            Material.bar
-                                .opacity(0.5)
-                                .blendMode(.softLight)
-                        )
-                }
+                Color.black.opacity(0.3)
             } else {
-                Color.defaultLayoutBar
+                // Use a subtle, semi-transparent background that works in both light and dark modes
+                RoundedRectangle(cornerRadius: 9, style: .circular)
+                    .fill(.ultraThinMaterial)
             }
         }
         .overlay {

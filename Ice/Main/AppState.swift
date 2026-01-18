@@ -129,8 +129,7 @@ final class AppState: ObservableObject {
                     navigationState.isSettingsPresented = isVisible
                 }
                 .store(in: &c)
-        } else {
-            Logger.appState.warning("No settings window!")
+            Logger.appState.debug("No settings window assigned yet")
         }
 
         Publishers.Merge(

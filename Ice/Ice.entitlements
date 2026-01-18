@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict/>
+<dict>
+	<!-- 网络访问（用于 Sparkle 自动更新） -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+	<!-- 读取用户选择的文件 -->
+	<key>com.apple.security.files.user-selected.read-only</key>
+	<true/>
+	<!-- App Sandbox -->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+</dict>
 </plist>

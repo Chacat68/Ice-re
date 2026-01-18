@@ -258,15 +258,31 @@ extension Bridging {
     ///
     /// - Parameter pid: The Unix process identifier of the process to check.
     static func responsivity(for pid: pid_t) -> Responsivity {
-        var psn = ProcessSerialNumber()
-        let result = GetProcessForPID(pid, &psn)
-        guard result == noErr else {
-            Logger.bridging.error("GetProcessForPID failed with error \(result)")
+        // First, check if the process exists using modern API
+        guard let app = NSRunningApplication(processIdentifier: pid) else {
+            Logger.bridging.debug("No running application found for PID \(pid)")
             return .unknown
         }
-        if CGSEventIsAppUnresponsive(CGSMainConnectionID(), &psn) {
+
+        // If the app is terminated, it's unresponsive
+        if app.isTerminated {
             return .unresponsive
         }
+
+        // Use CGSEventIsAppUnresponsive for more accurate responsiveness check
+        // This still requires PSN, but we handle the deprecated API gracefully
+        var psn = ProcessSerialNumber()
+        let result = GetProcessForPID(pid, &psn)
+        if result == noErr {
+            if CGSEventIsAppUnresponsive(CGSMainConnectionID(), &psn) {
+                return .unresponsive
+            }
+        } else {
+            // If GetProcessForPID fails, fall back to basic check
+            // The app exists (we found it above), so assume responsive
+            Logger.bridging.debug("GetProcessForPID failed for PID \(pid), assuming responsive")
+        }
+
         return .responsive
     }
 }

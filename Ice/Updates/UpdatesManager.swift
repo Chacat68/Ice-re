@@ -60,6 +60,13 @@ final class UpdatesManager: NSObject, ObservableObject {
 
     /// Sets up the manager.
     func performSetup() {
+        // Pre-configure Sparkle to automatically check for updates on first launch
+        // This prevents Sparkle from showing the "Check for updates automatically?" dialog
+        let hasConfiguredSparkle = UserDefaults.standard.object(forKey: "SUEnableAutomaticChecks") != nil
+        if !hasConfiguredSparkle {
+            UserDefaults.standard.set(true, forKey: "SUEnableAutomaticChecks")
+        }
+
         _ = updaterController
         configureCancellables()
     }

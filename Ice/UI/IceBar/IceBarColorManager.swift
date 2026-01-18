@@ -52,7 +52,9 @@ final class IceBarColorManager: ObservableObject {
                 else {
                     return
                 }
-                updateColorInfo(with: frame, screen: screen)
+                DispatchQueue.main.async {
+                    self.updateColorInfo(with: frame, screen: screen)
+                }
             }
             .store(in: &c)
 

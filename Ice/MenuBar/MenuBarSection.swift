@@ -133,18 +133,26 @@ final class MenuBarSection {
             let appState,
             isHidden
         else {
+            Logger.menuBarSection.debug("Show aborted: appState is nil or isHidden is false")
             return
         }
         guard controlItem.isAddedToMenuBar else {
+            Logger.menuBarSection.debug("Show aborted: control item not added to menu bar")
             // The section is disabled.
             // TODO: Can we use isEnabled for this check?
             return
         }
+
+        Logger.menuBarSection.debug("Attempting to show section: \(self.name.logString). useIceBar: \(self.useIceBar)")
+
         switch name {
         case .visible where useIceBar, .hidden where useIceBar:
             Task {
+                Logger.menuBarSection.debug("Attempting to show Ice Bar for section: \(self.name.logString)")
                 if let screenForIceBar {
                     await iceBarPanel?.show(section: .hidden, on: screenForIceBar)
+                } else {
+                    Logger.menuBarSection.error("Could not find screen for Ice Bar")
                 }
                 for section in appState.menuBarManager.sections {
                     section.controlItem.state = .hideItems

@@ -67,7 +67,9 @@ final class IceBarPanel: NSPanel {
                         // Only continue if the menu bar is automatically hidden, as Ice
                         // can't currently display its menu bar items.
                         appState.menuBarManager.isMenuBarHiddenBySystemUserDefaults,
-                        let info = window.flatMap({ WindowInfo(windowID: CGWindowID($0.windowNumber)) }),
+                        let window,
+                        window.windowNumber > 0,
+                        let info = WindowInfo(windowID: CGWindowID(window.windowNumber)),
                         // Window being offscreen means the menu bar is currently hidden.
                         // Close the bar, as things will start to look weird if we don't.
                         !info.isOnScreen
@@ -160,6 +162,8 @@ final class IceBarPanel: NSPanel {
         appState.navigationState.isIceBarPresented = true
         currentSection = section
 
+        Logger.iceBarPanel.debug("Showing Ice Bar for section: \(section.logString)")
+
         await appState.itemManager.cacheItemsIfNeeded()
 
         if ScreenCapture.cachedCheckPermissions() {
@@ -182,6 +186,7 @@ final class IceBarPanel: NSPanel {
     }
 
     override func close() {
+        Logger.iceBarPanel.debug("Closing Ice Bar")
         super.close()
         contentView = nil
         currentSection = nil
@@ -487,4 +492,9 @@ private struct IceBarItemClickView: NSViewRepresentable {
     }
 
     func updateNSView(_ nsView: NSView, context: Context) { }
+}
+
+// MARK: - Logger
+private extension Logger {
+    static let iceBarPanel = Logger(category: "IceBarPanel")
 }

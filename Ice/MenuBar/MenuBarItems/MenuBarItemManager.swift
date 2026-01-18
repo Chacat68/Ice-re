@@ -339,9 +339,14 @@ extension MenuBarItemManager {
         let alwaysHiddenControlItem = items.firstIndex(matching: .alwaysHiddenControlItem).map { items.remove(at: $0) }
 
         guard let hiddenControlItem else {
-            Logger.itemManager.warning("Missing control item for hidden section")
-            Logger.itemManager.debug("Clearing menu bar item cache")
-            itemCache.clear()
+            // Only log if we haven't already logged this warning recently to avoid spamming
+            Logger.itemManager.debug("Missing control item for hidden section (might be initializing)")
+
+            // Only clear the cache if it's not already empty to avoid triggering unnecessary view updates
+            if !itemCache.managedItems.isEmpty {
+                Logger.itemManager.debug("Clearing menu bar item cache")
+                itemCache.clear()
+            }
             return
         }
 
@@ -359,8 +364,10 @@ extension MenuBarItemManager {
             )
         } catch {
             Logger.itemManager.error("Error enforcing control item order: \(error)")
-            Logger.itemManager.debug("Clearing menu bar item cache")
-            itemCache.clear()
+            if !itemCache.managedItems.isEmpty {
+                Logger.itemManager.debug("Clearing menu bar item cache")
+                itemCache.clear()
+            }
         }
     }
 }

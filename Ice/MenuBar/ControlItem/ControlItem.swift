@@ -66,7 +66,13 @@ final class ControlItem {
         guard let window else {
             return nil
         }
-        return CGWindowID(window.windowNumber)
+        // windowNumber can be negative for invalid windows, which would cause
+        // an overflow when converting to CGWindowID (UInt32)
+        let windowNumber = window.windowNumber
+        guard windowNumber > 0, windowNumber <= Int(UInt32.max) else {
+            return nil
+        }
+        return CGWindowID(windowNumber)
     }
 
     /// A Boolean value that indicates whether the control item serves as

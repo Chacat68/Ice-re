@@ -23,8 +23,24 @@ struct MenuBarLayoutSettingsPane: View {
 
     @ViewBuilder
     private var header: some View {
-        Text("Drag to arrange your menu bar items")
-            .font(.title2)
+        HStack {
+            Text("Drag to arrange your menu bar items")
+                .font(.headline)
+            Spacer()
+        }
+    }
+
+    @ViewBuilder
+    private var layoutBars: some View {
+        Form {
+            Section {
+                ForEach(MenuBarSection.Name.allCases, id: \.self) { section in
+                    layoutBar(for: section)
+                }
+            }
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+        }
+        .scrollContentBackground(.hidden)
 
         IceGroupBox {
             AnnotationView(
@@ -36,15 +52,6 @@ struct MenuBarLayoutSettingsPane: View {
                 } icon: {
                     Image(systemName: "lightbulb")
                 }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var layoutBars: some View {
-        VStack(spacing: 25) {
-            ForEach(MenuBarSection.Name.allCases, id: \.self) { section in
-                layoutBar(for: section)
             }
         }
     }
@@ -77,13 +84,16 @@ struct MenuBarLayoutSettingsPane: View {
             let section = appState.menuBarManager.section(withName: section),
             section.isEnabled
         {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 8) {
                 Text("\(section.name.displayString) Section")
-                    .font(.system(size: 14))
-                    .padding(.leading, 2)
+                    .font(.headline)
+                    .padding(.horizontal, 4)
 
-                LayoutBar(section: section)
-                    .environmentObject(appState.imageCache)
+                IceGroupBox {
+                    LayoutBar(section: section)
+                        .environmentObject(appState.imageCache)
+                        .padding(5)
+                }
             }
         }
     }

@@ -124,12 +124,15 @@ final class AccessibilityPermission: Permission {
                 "Arrange menu bar items.",
             ],
             isRequired: true,
-            settingsURL: nil,
+            settingsURL: URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"),
             check: {
-                checkIsProcessTrusted()
+                // Use native macOS API to check accessibility permissions
+                AXIsProcessTrusted()
             },
             request: {
-                checkIsProcessTrusted(prompt: true)
+                // Use native macOS API with prompt option
+                let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+                AXIsProcessTrustedWithOptions(options)
             }
         )
     }

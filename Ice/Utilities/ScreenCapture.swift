@@ -142,4 +142,3 @@ enum ScreenCapture {
 private extension Logger {
     static let screenCapture = Logger(category: "ScreenCapture")
 }
-
