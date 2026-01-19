@@ -137,14 +137,18 @@ final class MenuBarManager: ObservableObject {
         appState?.settingsWindow?.publisher(for: \.isVisible)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.updateAverageColorInfo()
+                DispatchQueue.main.async {
+                    self?.updateAverageColorInfo()
+                }
             }
             .store(in: &c)
 
         Timer.publish(every: 5, on: .main, in: .default)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.updateAverageColorInfo()
+                DispatchQueue.main.async {
+                    self?.updateAverageColorInfo()
+                }
             }
             .store(in: &c)
 
@@ -212,10 +216,14 @@ final class MenuBarManager: ObservableObject {
                     // If the minX of the item is less than or equal to the maxX of the
                     // application menu frame, activate the app to hide the menu.
                     if leftmostItem.frame.minX <= applicationMenuFrame.maxX {
-                        hideApplicationMenus()
+                        DispatchQueue.main.async {
+                            self.hideApplicationMenus()
+                        }
                     }
                 } else if isHidingApplicationMenus {
-                    showApplicationMenus()
+                    DispatchQueue.main.async {
+                        self.showApplicationMenus()
+                    }
                 }
             }
             .store(in: &c)

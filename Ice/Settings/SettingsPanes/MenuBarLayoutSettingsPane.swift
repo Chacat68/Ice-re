@@ -27,6 +27,12 @@ struct MenuBarLayoutSettingsPane: View {
             Text("Drag to arrange your menu bar items")
                 .font(.headline)
             Spacer()
+            Button("Fetch All Icons") {
+                Task {
+                    await appState.itemManager.cacheItemsIfNeeded(force: true)
+                    await appState.imageCache.updateCacheWithoutChecks(sections: MenuBarSection.Name.allCases)
+                }
+            }
         }
     }
 

@@ -8,8 +8,6 @@
 	<!-- 读取用户选择的文件 -->
 	<key>com.apple.security.files.user-selected.read-only</key>
 	<true/>
-	<!-- App Sandbox -->
-	<key>com.apple.security.app-sandbox</key>
-	<true/>
+
 </dict>
 </plist>

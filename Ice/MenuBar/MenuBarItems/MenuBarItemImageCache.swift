@@ -112,12 +112,32 @@ final class MenuBarItemImageCache: ObservableObject {
         let option: CGWindowImageOption = [.boundsIgnoreFraming, .bestResolution]
         let defaultItemThickness = NSStatusBar.system.thickness * backingScaleFactor
 
+        // First, try to get icons from app bundles (no screen recording permission needed)
+        let iconProvider = MenuBarItemIconProvider.shared
+        var itemsNeedingScreenshot = [MenuBarItem]()
+
+        for item in items {
+            if let bundleIcon = iconProvider.getIcon(for: item),
+                let cgImage = bundleIcon.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+                images[item.info] = cgImage
+            } else {
+                // Mark for screenshot fallback
+                itemsNeedingScreenshot.append(item)
+            }
+        }
+
+        // If we have all icons from bundles, return early
+        if itemsNeedingScreenshot.isEmpty {
+            return images
+        }
+
+        // Fallback: Use screen capture for items without bundle icons
         var itemInfos = [CGWindowID: MenuBarItemInfo]()
         var itemFrames = [CGWindowID: CGRect]()
         var windowIDs = [CGWindowID]()
         var frame = CGRect.null
 
-        for item in items {
+        for item in itemsNeedingScreenshot {
             let windowID = item.windowID
             guard
                 // Use the most up-to-date window frame.

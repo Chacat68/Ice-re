@@ -122,6 +122,7 @@ final class ControlItem {
             let constraints = button.window?.contentView?.constraintsAffectingLayout(for: .horizontal),
             let constraint = constraints.first(where: Predicates.controlItemConstraint(button: button))
         {
+            button.window?.title = identifier.rawValue
             assert(constraints.filter(Predicates.controlItemConstraint(button: button)).count == 1)
             self.constraint = constraint
         } else {
@@ -184,7 +185,9 @@ final class ControlItem {
         constraint?.publisher(for: \.isActive)
             .removeDuplicates()
             .sink { [weak self] isActive in
-                self?.isVisible = isActive
+                DispatchQueue.main.async {
+                    self?.isVisible = isActive
+                }
             }
             .store(in: &c)
 
@@ -211,10 +214,18 @@ final class ControlItem {
                     return
                 }
 
-                if isVisible {
-                    hotkey.enable()
-                } else {
-                    hotkey.disable()
+                DispatchQueue.main.async {
+                    if isVisible {
+                        if
+                            let window = self.statusItem.button?.window,
+                            window.title != self.identifier.rawValue
+                        {
+                            window.title = self.identifier.rawValue
+                        }
+                        hotkey.enable()
+                    } else {
+                        hotkey.disable()
+                    }
                 }
             }
             .store(in: &c)
@@ -228,7 +239,9 @@ final class ControlItem {
                 else {
                     return
                 }
-                windowFrame = frame
+                DispatchQueue.main.async {
+                    self.windowFrame = frame
+                }
             }
             .store(in: &c)
 
@@ -317,6 +330,10 @@ final class ControlItem {
                     }
                 }
                 .store(in: &c)
+
+            if identifier == .hidden {
+                addToMenuBar()
+            }
         }
 
         cancellables = c
@@ -337,6 +354,14 @@ final class ControlItem {
 
     /// Updates the appearance of the status item using the given hiding state.
     private func updateStatusItem(with state: HidingState) {
+        // Ensure the window has the correct title so that the menu bar item
+        // manager can identify it.
+        if let window = statusItem.button?.window {
+            if window.title != identifier.rawValue {
+                window.title = identifier.rawValue
+            }
+        }
+
         guard
             let appState,
             let section,

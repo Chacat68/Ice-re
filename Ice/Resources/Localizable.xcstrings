@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "(" : {
 
     },
@@ -104,19 +107,54 @@
       }
     },
     "Apply" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用"
+          }
+        }
+      }
     },
     "Apply different settings based on the current system appearance" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "根据当前系统外观应用不同的设置"
+          }
+        }
+      }
     },
     "Apply system theme to icon" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将系统主题应用于图标"
+          }
+        }
+      }
     },
     "Apply the current spacing" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用当前间距"
+          }
+        }
+      }
     },
     "Applying this setting will relaunch all apps with menu bar items. Some apps may need to be manually relaunched." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用此设置将重新启动所有带有菜单栏项目的应用程序。某些应用程序可能需要手动重新启动。"
+          }
+        }
+      }
     },
     "Arrange menu bar items." : {
       "extractionState" : "stale",
@@ -140,7 +178,14 @@
       }
     },
     "Automatically download updates" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动下载更新"
+          }
+        }
+      }
     },
     "Automatically rehide" : {
       "localizations" : {
@@ -166,16 +211,54 @@
       }
     },
     "Border" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "边框"
+          }
+        }
+      }
     },
     "Border Color" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "边框颜色"
+          }
+        }
+      }
     },
     "Border Width" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "边框宽度"
+          }
+        }
+      }
+    },
+    "Changes take effect after restarting the app" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改将在重启应用后生效"
+          }
+        }
+      }
     },
     "Check for Updates" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查更新"
+          }
+        }
+      }
     },
     "Check for Updates…" : {
       "extractionState" : "stale",
@@ -189,16 +272,44 @@
       }
     },
     "Choose a custom icon to show in the menu bar" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择在菜单栏中显示的自定义图标"
+          }
+        }
+      }
     },
     "Choose image…" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择图片…"
+          }
+        }
+      }
     },
     "Click inside an empty area of the menu bar to show hidden menu bar items" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点击菜单栏的空白区域以显示隐藏的菜单栏项目"
+          }
+        }
+      }
     },
     "Click item" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点击项目"
+          }
+        }
+      }
     },
     "Continue" : {
       "localizations" : {
@@ -221,10 +332,24 @@
       }
     },
     "Contribute" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "贡献"
+          }
+        }
+      }
     },
     "Dark Appearance" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "深色外观"
+          }
+        }
+      }
     },
     "default" : {
       "localizations" : {
@@ -248,10 +373,24 @@
       }
     },
     "Display the icon as a monochrome image matching the system appearance" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将图标显示为与系统外观匹配的单色图像"
+          }
+        }
+      }
     },
     "Done" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
+          }
+        }
+      }
     },
     "Drag to arrange your menu bar items" : {
       "localizations" : {
@@ -294,6 +433,16 @@
         }
       }
     },
+    "Fetch All Icons" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取全部图标"
+          }
+        }
+      }
+    },
     "Enable the Ice Bar" : {
       "localizations" : {
         "zh-Hans" : {
@@ -319,10 +468,24 @@
       }
     },
     "Focused app" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "焦点应用"
+          }
+        }
+      }
     },
     "Full" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完整"
+          }
+        }
+      }
     },
     "General" : {
       "extractionState" : "stale",
@@ -357,7 +520,14 @@
       }
     },
     "Gradient" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "渐变"
+          }
+        }
+      }
     },
     "Grant Permission" : {
       "localizations" : {
@@ -391,10 +561,24 @@
       }
     },
     "Hold to Preview" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住预览"
+          }
+        }
+      }
     },
     "Hotkey is reserved by macOS" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快捷键已被 macOS 保留"
+          }
+        }
+      }
     },
     "Hotkeys" : {
       "extractionState" : "stale",
@@ -408,7 +592,14 @@
       }
     },
     "Hover over an empty area of the menu bar to show hidden menu bar items" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将鼠标悬停在菜单栏的空白区域以显示隐藏的菜单栏项目"
+          }
+        }
+      }
     },
     "Ice" : {
 
@@ -445,10 +636,24 @@
       }
     },
     "Ice cannot display menu bar items for automatically hidden menu bars" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ice 无法显示自动隐藏菜单栏的菜单栏项目"
+          }
+        }
+      }
     },
     "Ice cannot edit the appearance of automatically hidden menu bars" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ice 无法编辑自动隐藏菜单栏的外观"
+          }
+        }
+      }
     },
     "Ice icon" : {
       "localizations" : {
@@ -501,6 +706,16 @@
         }
       }
     },
+    "Language" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语言"
+          }
+        }
+      }
+    },
     "Last checked:" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -513,7 +728,14 @@
       }
     },
     "Last checked: %@" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次检查：%@"
+          }
+        }
+      }
     },
     "Launch at login" : {
       "extractionState" : "stale",
@@ -527,16 +749,44 @@
       }
     },
     "Leading End Cap" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前端帽"
+          }
+        }
+      }
     },
     "left click" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左键点击"
+          }
+        }
+      }
     },
     "Light Appearance" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "浅色外观"
+          }
+        }
+      }
     },
     "Location" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "位置"
+          }
+        }
+      }
     },
     "Make more room in the menu bar by hiding the left application menus if needed" : {
       "localizations" : {
@@ -579,7 +829,14 @@
       }
     },
     "Menu Bar Items" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "菜单栏项目"
+          }
+        }
+      }
     },
     "Menu bar items are rehidden after a fixed amount of time" : {
       "localizations" : {
@@ -633,13 +890,34 @@
       }
     },
     "Menu Bar Sections" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "菜单栏分区"
+          }
+        }
+      }
     },
     "Menu Bar Shape" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "菜单栏形状"
+          }
+        }
+      }
     },
     "Mouse pointer" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "鼠标指针"
+          }
+        }
+      }
     },
     "Mouse Pointer" : {
       "extractionState" : "stale",
@@ -653,7 +931,14 @@
       }
     },
     "No shape kind selected" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未选择形状类型"
+          }
+        }
+      }
     },
     "none" : {
       "localizations" : {
@@ -666,7 +951,14 @@
       }
     },
     "None" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无"
+          }
+        }
+      }
     },
     "Note: You may need to log out and back in for this setting to apply properly." : {
       "localizations" : {
@@ -682,7 +974,14 @@
 
     },
     "Open Ice Settings" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开 Ice 设置"
+          }
+        }
+      }
     },
     "Option + click one of Ice's menu bar items to show the section" : {
       "localizations" : {
@@ -699,13 +998,20 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按住 Option 键点击 Ice 的菜单栏项目，或点击菜单栏的空白区域来显示该分区"
+            "value" : "按住 Option 键点击 Ice 的菜单栏项目，或按住 Option 键点击菜单栏的空白区域来显示该分区"
           }
         }
       }
     },
     "Other" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其他"
+          }
+        }
+      }
     },
     "Permission Granted" : {
       "localizations" : {
@@ -738,10 +1044,24 @@
       }
     },
     "Quit Ice" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "退出 Ice"
+          }
+        }
+      }
     },
     "Record Hotkey" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "录制快捷键"
+          }
+        }
+      }
     },
     "Rehide interval" : {
       "extractionState" : "stale",
@@ -766,19 +1086,54 @@
       }
     },
     "Report a Bug" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "报告错误"
+          }
+        }
+      }
     },
     "Reset" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重置"
+          }
+        }
+      }
     },
     "Reset to the default spacing" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重置为默认间距"
+          }
+        }
+      }
     },
     "right click" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右键点击"
+          }
+        }
+      }
     },
     "Round Cap" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "圆形帽"
+          }
+        }
+      }
     },
     "Screen Recording" : {
       "extractionState" : "stale",
@@ -792,7 +1147,14 @@
       }
     },
     "Scroll or swipe in the menu bar to toggle hidden menu bar items" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在菜单栏中滚动或轻扫以切换隐藏的菜单栏项目"
+          }
+        }
+      }
     },
     "Search menu bar items" : {
       "localizations" : {
@@ -805,7 +1167,14 @@
       }
     },
     "Search menu bar items…" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索菜单栏项目…"
+          }
+        }
+      }
     },
     "second" : {
       "extractionState" : "stale",
@@ -841,10 +1210,24 @@
       }
     },
     "Shadow" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "阴影"
+          }
+        }
+      }
     },
     "Shape Kind" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "形状类型"
+          }
+        }
+      }
     },
     "Show all sections when Command + dragging menu bar items" : {
       "localizations" : {
@@ -867,7 +1250,14 @@
       }
     },
     "Show hidden menu bar items in a separate bar below the menu bar" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在菜单栏下方的单独栏中显示隐藏的菜单栏项目"
+          }
+        }
+      }
     },
     "Show Ice icon" : {
       "localizations" : {
@@ -880,7 +1270,14 @@
       }
     },
     "Show item" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示项目"
+          }
+        }
+      }
     },
     "Show on click" : {
       "localizations" : {
@@ -943,19 +1340,65 @@
       }
     },
     "Solid" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "纯色"
+          }
+        }
+      }
     },
     "Split" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分离"
+          }
+        }
+      }
     },
     "Square Cap" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "方形帽"
+          }
+        }
+      }
     },
     "Strategy" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "策略"
+          }
+        }
+      }
     },
     "Support Ice" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支持 Ice"
+          }
+        }
+      }
+    },
+    "System" : {
+      "comment" : "System language option",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系统"
+          }
+        }
+      }
     },
     "Temporarily shown item delay" : {
       "localizations" : {
@@ -1008,7 +1451,14 @@
       }
     },
     "The Ice Bar requires screen recording permissions." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ice Bar 需要屏幕录制权限。"
+          }
+        }
+      }
     },
     "The Ice Bar's location changes based on context" : {
       "localizations" : {
@@ -1031,7 +1481,14 @@
       }
     },
     "Tint" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "着色"
+          }
+        }
+      }
     },
     "Tip: you can also arrange menu bar items by Command + dragging them in the menu bar" : {
       "localizations" : {
@@ -1044,7 +1501,14 @@
       }
     },
     "Tip: you can also edit these settings by right-clicking in an empty area of the menu bar" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提示：你也可以通过右键点击菜单栏的空白区域来编辑这些设置"
+          }
+        }
+      }
     },
     "Toggle application menus" : {
       "localizations" : {
@@ -1077,16 +1541,44 @@
       }
     },
     "Trailing End Cap" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "后端帽"
+          }
+        }
+      }
     },
     "Type Hotkey" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输入快捷键"
+          }
+        }
+      }
     },
     "Unable to display menu bar items" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法显示菜单栏项目"
+          }
+        }
+      }
     },
     "Use dynamic appearance" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用动态外观"
+          }
+        }
+      }
     },
     "Use Ice Bar" : {
       "localizations" : {
@@ -1099,10 +1591,24 @@
       }
     },
     "Use inset shape on screens with notch" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在带有刘海的屏幕上使用内嵌形状"
+          }
+        }
+      }
     },
     "Version %@" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本 %@"
+          }
+        }
+      }
     },
     "Visible" : {
       "extractionState" : "stale",

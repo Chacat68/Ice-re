@@ -74,6 +74,9 @@ struct GeneralSettingsPane: View {
             IceSection {
                 spacingOptions
             }
+            IceSection {
+                languageOptions
+            }
         }
         .alert(isPresented: $isPresentingError, error: presentedError) {
             Button("OK") {
@@ -342,5 +345,21 @@ struct GeneralSettingsPane: View {
         tempItemSpacingOffset = 0
         manager.itemSpacingOffset = tempItemSpacingOffset
         applyOffset()
+    }
+
+    @ViewBuilder
+    private var languageOptions: some View {
+        IceLabeledContent("Language") {
+            Picker("", selection: manager.bindings.appLanguage) {
+                ForEach(AppLanguage.allCases) { language in
+                    Text(language.displayName).tag(language)
+                }
+            }
+            .labelsHidden()
+            .pickerStyle(.menu)
+        }
+        AnnotationView(alignment: .leading, font: .callout) {
+            Text("Changes take effect after restarting the app")
+        }
     }
 }

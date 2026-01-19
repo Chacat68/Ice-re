@@ -174,7 +174,7 @@ extension MenuBarItem {
     static func getMenuBarItems(on display: CGDirectDisplayID? = nil, onScreenOnly: Bool, activeSpaceOnly: Bool) -> [MenuBarItem] {
         var option: Bridging.WindowListOption = [.menuBarItems]
 
-        var titlePredicate: (MenuBarItem) -> Bool = { _ in true }
+        let titlePredicate: (MenuBarItem) -> Bool = { _ in true }
         var boundsPredicate: (CGWindowID) -> Bool = { _ in true }
 
         if onScreenOnly {
@@ -182,7 +182,6 @@ extension MenuBarItem {
         }
         if activeSpaceOnly {
             option.insert(.activeSpace)
-            titlePredicate = { $0.title != "" }
         }
         if let display {
             let displayBounds = CGDisplayBounds(display)

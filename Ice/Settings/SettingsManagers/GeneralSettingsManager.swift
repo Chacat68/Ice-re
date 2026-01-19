@@ -59,6 +59,9 @@ final class GeneralSettingsManager: ObservableObject {
     /// is ``RehideStrategy/timed``.
     @Published var rehideInterval: TimeInterval = 15
 
+    /// The language used by the app.
+    @Published var appLanguage: AppLanguage = .system
+
     /// Encoder for properties.
     private let encoder = JSONEncoder()
 
@@ -90,6 +93,12 @@ final class GeneralSettingsManager: ObservableObject {
         Defaults.ifPresent(key: .itemSpacingOffset, assign: &itemSpacingOffset)
         Defaults.ifPresent(key: .autoRehide, assign: &autoRehide)
         Defaults.ifPresent(key: .rehideInterval, assign: &rehideInterval)
+
+        Defaults.ifPresent(key: .appLanguage) { rawValue in
+            if let language = AppLanguage(rawValue: rawValue) {
+                appLanguage = language
+            }
+        }
 
         Defaults.ifPresent(key: .iceBarLocation) { rawValue in
             if let location = IceBarLocation(rawValue: rawValue) {
@@ -188,7 +197,9 @@ final class GeneralSettingsManager: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak appState] offset in
                 Defaults.set(offset, forKey: .itemSpacingOffset)
-                appState?.spacingManager.offset = Int(offset)
+                DispatchQueue.main.async {
+                    appState?.spacingManager.offset = Int(offset)
+                }
             }
             .store(in: &c)
 
@@ -210,6 +221,14 @@ final class GeneralSettingsManager: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { interval in
                 Defaults.set(interval, forKey: .rehideInterval)
+            }
+            .store(in: &c)
+
+        $appLanguage
+            .receive(on: DispatchQueue.main)
+            .sink { language in
+                Defaults.set(language.rawValue, forKey: .appLanguage)
+                language.apply()
             }
             .store(in: &c)
 
