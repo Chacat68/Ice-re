@@ -61,6 +61,12 @@ enum ScreenCapture {
             return nil
         }
 
+        // Check screen capture permissions before calling SCShareableContent
+        // to prevent triggering the permission request dialog repeatedly
+        guard cachedCheckPermissions() else {
+            return nil
+        }
+
         // Use ScreenCaptureKit for capturing windows
         var resultImage: CGImage?
         let semaphore = DispatchSemaphore(value: 0)
