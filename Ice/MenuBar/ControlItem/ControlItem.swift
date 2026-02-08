@@ -453,10 +453,10 @@ final class ControlItem {
             return hotkeySettingsManager.hotkey(withAction: action)
         }
 
-        let menu = NSMenu(title: "Ice")
+        let menu = NSMenu(title: "Veil")
 
         let settingsItem = NSMenuItem(
-            title: NSLocalizedString("Ice Settings…", comment: "Context menu item to open settings"),
+            title: NSLocalizedString("Veil Settings…", comment: "Context menu item to open settings"),
             action: #selector(AppDelegate.openSettingsWindow),
             keyEquivalent: ","
         )
@@ -539,7 +539,7 @@ final class ControlItem {
         menu.addItem(.separator())
 
         let quitItem = NSMenuItem(
-            title: NSLocalizedString("Quit Ice", comment: "Context menu item to quit the app"),
+            title: NSLocalizedString("Quit Veil", comment: "Context menu item to quit the app"),
             action: #selector(NSApp.terminate),
             keyEquivalent: "q"
         )

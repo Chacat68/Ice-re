@@ -2,13 +2,13 @@
 set -e
 
 # Configuration
-APP_NAME="Ice"
+APP_NAME="Veil"
 PROJECT_NAME="Ice.xcodeproj"
 SCHEME_NAME="Ice"
-DMG_NAME="Ice.dmg"
-VOL_NAME="Ice"
+DMG_NAME="Veil.dmg"
+VOL_NAME="Veil"
 BUILD_DIR="build"
-ARCHIVE_PATH="${BUILD_DIR}/Ice.xcarchive"
+ARCHIVE_PATH="${BUILD_DIR}/Veil.xcarchive"
 EXPORT_PATH="${BUILD_DIR}/export"
 SRC_APP="${EXPORT_PATH}/${APP_NAME}.app"
 OUTPUT_DMG="${BUILD_DIR}/${DMG_NAME}"

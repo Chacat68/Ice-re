@@ -116,15 +116,15 @@ struct GeneralSettingsPane: View {
 
     @ViewBuilder
     private var iceIconOptions: some View {
-        Toggle("Show Ice icon", isOn: manager.bindings.showIceIcon)
+        Toggle("Show Veil icon", isOn: manager.bindings.showIceIcon)
             .annotation {
                 if !manager.showIceIcon {
-                    Text("You can still access Ice's settings by right-clicking an empty area in the menu bar")
+                    Text("You can still access Veil's settings by right-clicking an empty area in the menu bar")
                 }
             }
         if manager.showIceIcon {
-            IceMenu("Ice icon") {
-                Picker("Ice icon", selection: manager.bindings.iceIcon) {
+            IceMenu("Veil icon") {
+                Picker("Veil icon", selection: manager.bindings.iceIcon) {
                     ForEach(ControlItemImageSet.userSelectableIceIcons) { imageSet in
                         Button {
                             manager.iceIcon = imageSet
@@ -188,7 +188,7 @@ struct GeneralSettingsPane: View {
 
     @ViewBuilder
     private var useIceBar: some View {
-        Toggle("Use Ice Bar", isOn: manager.bindings.useIceBar)
+        Toggle("Use Veil Bar", isOn: manager.bindings.useIceBar)
             .annotation("Show hidden menu bar items in a separate bar below the menu bar")
     }
 
@@ -202,11 +202,11 @@ struct GeneralSettingsPane: View {
         .annotation {
             switch manager.iceBarLocation {
             case .dynamic:
-                Text("The Ice Bar's location changes based on context")
+                Text("The Veil Bar's location changes based on context")
             case .mousePointer:
-                Text("The Ice Bar is centered below the mouse pointer")
+                Text("The Veil Bar is centered below the mouse pointer")
             case .iceIcon:
-                Text("The Ice Bar is centered below the Ice icon")
+                Text("The Veil Bar is centered below the Veil icon")
             }
         }
     }

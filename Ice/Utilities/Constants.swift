@@ -23,7 +23,7 @@ enum Constants {
 
     /// The bundle identifier of the app.
     static var bundleIdentifier: String {
-        Bundle.main.bundleIdentifier ?? "com.jordanteacher.Ice"
+        Bundle.main.bundleIdentifier ?? "com.jordanteacher.Veil"
     }
 
     /// The identifier for the settings window.
@@ -33,7 +33,7 @@ enum Constants {
     static let permissionsWindowID = "PermissionsWindow"
 
     /// The title for the settings window.
-    static let settingsWindowTitle = "Ice"
+    static let settingsWindowTitle = "Veil"
 
     /// The title for the permissions window.
     static let permissionsWindowTitle = "Permissions"

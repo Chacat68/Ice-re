@@ -127,7 +127,7 @@ struct DebugSettingsPane: View {
 
     private func testNotification() {
         let notification = UNMutableNotificationContent()
-        notification.title = "Ice Test Notification"
+        notification.title = "Veil Test Notification"
         notification.body = "If you see this notification, the notification feature is working properly"
 
         UNUserNotificationCenter.current().add(UNNotificationRequest(
@@ -182,8 +182,8 @@ struct DiagnosticInfo {
     @MainActor
     func exportAsText(appState: AppState) -> String {
         var text = """
-        Ice Diagnostic Report
-        =====================
+        Veil Diagnostic Report
+        ======================
 
         System Information
         ------------------
@@ -226,7 +226,7 @@ struct DiagnosticInfo {
         }
 
         // 查找 Ice 相关的日志文件
-        let iceLogs = logFiles.filter { $0.lastPathComponent.contains("Ice") }
+        let iceLogs = logFiles.filter { $0.lastPathComponent.contains("Veil") || $0.lastPathComponent.contains("Ice") }
 
         guard let latestLog = iceLogs.max(by: { $0.path < $1.path }) else {
             return nil
