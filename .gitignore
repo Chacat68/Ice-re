@@ -1,3 +1,13 @@
 .DS_Store
 build/
 xcuserdata/
+*.xcuserstate
+*.xcuserdatad/
+
+# Build logs
+build_log.txt
+*.log
+
+# Environment
+.env
+.env.*
