@@ -233,7 +233,7 @@ struct DiagnosticInfo {
         }
 
         // 读取最后几行日志
-        if let logContent = try? String(contentsOf: latestLog) {
+        if let logContent = try? String(contentsOf: latestLog, encoding: .utf8) {
             let lines = logContent.components(separatedBy: "\n")
             let errorLines = lines.filter { $0.contains("error") || $0.contains("Error") || $0.contains("ERROR") || $0.contains("warning") || $0.contains("Failed") }
             if !errorLines.isEmpty {
