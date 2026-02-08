@@ -27,10 +27,16 @@ enum ScreenCapture {
     /// The first time this function is called, the permissions state is computed, cached, and returned.
     /// Subsequent calls either return the cached value, or recompute the permissions state before caching
     /// and returning it.
+    ///
+    /// Thread-safe implementation using thread-local storage.
     static func cachedCheckPermissions(reset: Bool = false) -> Bool {
         enum Context {
             static var lastCheckResult: Bool?
+            static let lock = NSLock()
         }
+
+        Context.lock.lock()
+        defer { Context.lock.unlock() }
 
         if !reset {
             if let lastCheckResult = Context.lastCheckResult {

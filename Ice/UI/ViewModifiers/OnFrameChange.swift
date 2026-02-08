@@ -35,9 +35,8 @@ extension View {
                         value: proxy.frame(in: coordinateSpace)
                     )
                     .onPreferenceChange(FramePreferenceKey.self) { frame in
-                        DispatchQueue.main.async {
-                            action(frame)
-                        }
+                        // Modern SwiftUI: preference changes are already on main actor
+                        action(frame)
                     }
             }
         }
@@ -61,3 +60,4 @@ extension View {
         }
     }
 }
+

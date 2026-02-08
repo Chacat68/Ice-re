@@ -6,19 +6,25 @@
 import Foundation
 
 enum Constants {
-    // swiftlint:disable force_unwrapping
     /// The version string in the app's bundle.
-    static let versionString = Bundle.main.versionString!
+    static var versionString: String {
+        Bundle.main.versionString ?? "1.0"
+    }
 
     /// The build string in the app's bundle.
-    static let buildString = Bundle.main.buildString!
+    static var buildString: String {
+        Bundle.main.buildString ?? "1"
+    }
 
     /// The user-readable copyright string in the app's bundle.
-    static let copyrightString = Bundle.main.copyrightString!
+    static var copyrightString: String {
+        Bundle.main.copyrightString ?? "© \(Calendar.current.component(.year, from: Date()))"
+    }
 
     /// The bundle identifier of the app.
-    static let bundleIdentifier = Bundle.main.bundleIdentifier!
-    // swiftlint:enable force_unwrapping
+    static var bundleIdentifier: String {
+        Bundle.main.bundleIdentifier ?? "com.jordanteacher.Ice"
+    }
 
     /// The identifier for the settings window.
     static let settingsWindowID = "SettingsWindow"

@@ -129,6 +129,7 @@ final class AppState: ObservableObject {
                     navigationState.isSettingsPresented = isVisible
                 }
                 .store(in: &c)
+        } else {
             Logger.appState.debug("No settings window assigned yet")
         }
 
@@ -144,8 +145,13 @@ final class AppState: ObservableObject {
             else {
                 return
             }
-            Task.detached {
-                if ScreenCapture.cachedCheckPermissions(reset: true) {
+            // Capture necessary state on the main actor before detaching
+            let hasPermissions = ScreenCapture.cachedCheckPermissions(reset: true)
+            Task.detached { [weak self] in
+                guard let self else {
+                    return
+                }
+                if hasPermissions {
                     await self.imageCache.updateCacheWithoutChecks(sections: MenuBarSection.Name.allCases)
                 }
             }

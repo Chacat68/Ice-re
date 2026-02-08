@@ -6,10 +6,33 @@
 import Cocoa
 import Combine
 
-/// Cache for menu bar item images.
+/// Cache entry with access time tracking for LRU eviction.
+private struct CacheEntry {
+    let image: CGImage
+    var lastAccessed: Date
+
+    init(image: CGImage) {
+        self.image = image
+        self.lastAccessed = Date()
+    }
+}
+
+/// Cache for menu bar item images with LRU eviction policy.
 final class MenuBarItemImageCache: ObservableObject {
-    /// The cached item images.
+    /// The cached item images with access tracking.
     @Published private(set) var images = [MenuBarItemInfo: CGImage]()
+
+    /// Internal cache with access tracking for LRU eviction.
+    private var cache = [MenuBarItemInfo: CacheEntry]()
+
+    /// Maximum cache size in bytes (approximately 50MB).
+    private let maxCacheSize: Int = 50 * 1024 * 1024
+
+    /// Current cache size in bytes.
+    private var currentCacheSize: Int = 0
+
+    /// Cache access queue for thread safety.
+    private let cacheQueue = DispatchQueue(label: "com.jordanteacher.Ice.imageCache", attributes: .concurrent)
 
     /// The screen of the cached item images.
     private(set) var screen: NSScreen?
@@ -62,9 +85,12 @@ final class MenuBarItemImageCache: ObservableObject {
                 guard let self else {
                     return
                 }
-                Task.detached {
-                    if ScreenCapture.cachedCheckPermissions() {
-                        await self.updateCache()
+                // Check permissions on main actor before starting async work
+                let hasPermissions = ScreenCapture.cachedCheckPermissions()
+                Task { [weak self] in
+                    guard let self else { return }
+                    if hasPermissions {
+                        await updateCache()
                     }
                 }
             }
@@ -233,11 +259,66 @@ final class MenuBarItemImageCache: ObservableObject {
         }
 
         await MainActor.run { [newImages] in
-            images.merge(newImages) { (_, new) in new }
+            // Update cache with new images using LRU policy
+            for (info, image) in newImages {
+                setImageWithLRU(info, image)
+            }
         }
 
         self.screen = screen
         self.menuBarHeight = screen.getMenuBarHeight()
+    }
+
+    /// Sets an image in the cache with LRU eviction policy.
+    private func setImageWithLRU(_ info: MenuBarItemInfo, _ image: CGImage) {
+        let imageSize = estimateImageSize(image)
+
+        cacheQueue.async(flags: .barrier) { [weak self] in
+            guard let self else { return }
+
+            // Remove old entry if exists
+            if let oldEntry = self.cache[info] {
+                self.currentCacheSize -= estimateImageSize(oldEntry.image)
+            }
+
+            // Add new entry
+            let entry = CacheEntry(image: image)
+            self.cache[info] = entry
+            self.currentCacheSize += imageSize
+
+            // Evict LRU entries if cache is too large
+            self.evictLRUIfNeeded()
+
+            // Update published images
+            self.images[info] = image
+        }
+    }
+
+    /// Estimates the size of an image in bytes.
+    private func estimateImageSize(_ image: CGImage) -> Int {
+        let bytesPerRow = image.bytesPerRow
+        let height = image.height
+        return bytesPerRow * height
+    }
+
+    /// Evicts least recently used cache entries if cache size exceeds limit.
+    private func evictLRUIfNeeded() {
+        guard currentCacheSize > maxCacheSize else { return }
+
+        // Sort entries by last accessed time
+        let sortedEntries = cache.sorted { $0.value.lastAccessed < $1.value.lastAccessed }
+
+        // Remove oldest entries until cache is under limit
+        for (info, entry) in sortedEntries {
+            if currentCacheSize <= maxCacheSize * 3 / 4 { // Target 75% of max size
+                break
+            }
+
+            let size = estimateImageSize(entry.image)
+            cache.removeValue(forKey: info)
+            images.removeValue(forKey: info)
+            currentCacheSize -= size
+        }
     }
 
     /// Updates the cache for the given sections, if necessary.
