@@ -456,7 +456,7 @@ final class ControlItem {
         let menu = NSMenu(title: "Ice")
 
         let settingsItem = NSMenuItem(
-            title: "Ice Settings…",
+            title: NSLocalizedString("Ice Settings…", comment: "Context menu item to open settings"),
             action: #selector(AppDelegate.openSettingsWindow),
             keyEquivalent: ","
         )
@@ -466,7 +466,7 @@ final class ControlItem {
         menu.addItem(.separator())
 
         let searchItem = NSMenuItem(
-            title: "Search Menu Bar Items",
+            title: NSLocalizedString("Search Menu Bar Items", comment: "Context menu item to search menu bar items"),
             action: #selector(showSearchPanel),
             keyEquivalent: ""
         )
@@ -492,8 +492,12 @@ final class ControlItem {
                 // Section doesn't exist, or is disabled.
                 continue
             }
+            let showText = NSLocalizedString("Show", comment: "Menu item prefix for showing a section")
+            let hideText = NSLocalizedString("Hide", comment: "Menu item prefix for hiding a section")
+            let sectionText = NSLocalizedString("%@ Section", comment: "Menu item suffix for section name")
+            let sectionName = String(format: sectionText, name.localizedDisplayString)
             let item = NSMenuItem(
-                title: "\(section.isHidden ? "Show" : "Hide") the \(name.displayString) Section",
+                title: "\(section.isHidden ? showText : hideText) \(sectionName)",
                 action: #selector(toggleMenuBarSection),
                 keyEquivalent: ""
             )
@@ -525,7 +529,7 @@ final class ControlItem {
         menu.addItem(.separator())
 
         let checkForUpdatesItem = NSMenuItem(
-            title: "Check for Updates…",
+            title: NSLocalizedString("Check for Updates…", comment: "Context menu item to check for updates"),
             action: #selector(checkForUpdates),
             keyEquivalent: ""
         )
@@ -535,7 +539,7 @@ final class ControlItem {
         menu.addItem(.separator())
 
         let quitItem = NSMenuItem(
-            title: "Quit Ice",
+            title: NSLocalizedString("Quit Ice", comment: "Context menu item to quit the app"),
             action: #selector(NSApp.terminate),
             keyEquivalent: "q"
         )

@@ -23,6 +23,15 @@ final class MenuBarSection {
             }
         }
 
+        /// A localized string to show in the interface.
+        var localizedDisplayString: String {
+            switch self {
+            case .visible: NSLocalizedString("Visible", comment: "Section name")
+            case .hidden: NSLocalizedString("Hidden", comment: "Section name")
+            case .alwaysHidden: NSLocalizedString("Always-Hidden", comment: "Section name")
+            }
+        }
+
         /// A string to use for logging purposes.
         var logString: String {
             switch self {
