@@ -553,13 +553,13 @@
     "Enable the Ice Bar" : {
 
     },
-    "Enable the Veil Bar" : {
+    "Enable the Ice Bar" : {
       "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "启用 Veil Bar"
+            "value" : "启用 Ice Bar"
           }
         }
       }
@@ -1103,12 +1103,12 @@
         }
       }
     },
-    "Open Veil Settings" : {
+    "Open Ice Settings" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开 Veil 设置"
+            "value" : "打开 Ice 设置"
           }
         }
       }
@@ -1119,24 +1119,24 @@
     "Option + click one of Ice's menu bar items, or inside an empty area of the menu bar to show the section" : {
 
     },
-    "Option + click one of Veil's menu bar items to show the section" : {
+    "Option + click one of Ice's menu bar items to show the section" : {
       "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按住 Option 键点击 Veil 的菜单栏项目来显示该分区"
+            "value" : "按住 Option 键点击 Ice 的菜单栏项目来显示该分区"
           }
         }
       }
     },
-    "Option + click one of Veil's menu bar items, or inside an empty area of the menu bar to show the section" : {
+    "Option + click one of Ice's menu bar items, or inside an empty area of the menu bar to show the section" : {
       "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按住 Option 键点击 Veil 的菜单栏项目，或按住 Option 键点击菜单栏的空白区域来显示该分区"
+            "value" : "按住 Option 键点击 Ice 的菜单栏项目，或按住 Option 键点击菜单栏的空白区域来显示该分区"
           }
         }
       }
@@ -1202,13 +1202,13 @@
         }
       }
     },
-    "Quit Veil" : {
+    "Quit Ice" : {
       "comment" : "Context menu item to quit the app",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "退出 Veil"
+            "value" : "退出 Ice"
           }
         }
       }
@@ -1543,12 +1543,12 @@
         }
       }
     },
-    "Show Veil icon" : {
+    "Show Ice icon" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "显示 Veil 图标"
+            "value" : "显示 Ice 图标"
           }
         }
       }
@@ -1603,12 +1603,12 @@
         }
       }
     },
-    "Support Veil" : {
+    "Support Ice" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "支持 Veil"
+            "value" : "支持 Ice"
           }
         }
       }
@@ -1685,42 +1685,42 @@
         }
       }
     },
-    "The Veil Bar is centered below the mouse pointer" : {
+    "The Ice Bar is centered below the mouse pointer" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil Bar 居中显示在鼠标指针下方"
+            "value" : "Ice Bar 居中显示在鼠标指针下方"
           }
         }
       }
     },
-    "The Veil Bar is centered below the Veil icon" : {
+    "The Ice Bar is centered below the Ice icon" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil Bar 居中显示在 Veil 图标下方"
+            "value" : "Ice Bar 居中显示在 Ice 图标下方"
           }
         }
       }
     },
-    "The Veil Bar requires screen recording permissions." : {
+    "The Ice Bar requires screen recording permissions." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil Bar 需要屏幕录制权限。"
+            "value" : "Ice Bar 需要屏幕录制权限。"
           }
         }
       }
     },
-    "The Veil Bar's location changes based on context" : {
+    "The Ice Bar's location changes based on context" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil Bar 的位置会根据上下文自动调整"
+            "value" : "Ice Bar 的位置会根据上下文自动调整"
           }
         }
       }
@@ -1845,147 +1845,147 @@
         }
       }
     },
-    "Use Veil Bar" : {
+    "Use Ice Bar" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用 Veil Bar"
+            "value" : "使用 Ice Bar"
           }
         }
       }
     },
-    "Veil" : {
+    "Ice" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil"
+            "value" : "Ice"
           }
         }
       }
     },
-    "Veil Bar location" : {
+    "Ice Bar location" : {
       "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil Bar 位置"
+            "value" : "Ice Bar 位置"
           }
         }
       }
     },
-    "Veil can work in a limited mode without this permission." : {
+    "Ice can work in a limited mode without this permission." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "即使没有此权限，Veil 也可以在受限模式下工作。"
+            "value" : "即使没有此权限，Ice 也可以在受限模式下工作。"
           }
         }
       }
     },
-    "Veil cannot arrange menu bar items in automatically hidden menu bars" : {
+    "Ice cannot arrange menu bar items in automatically hidden menu bars" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil 无法在自动隐藏的菜单栏中排列菜单栏项目"
+            "value" : "Ice 无法在自动隐藏的菜单栏中排列菜单栏项目"
           }
         }
       }
     },
-    "Veil cannot display menu bar items for automatically hidden menu bars" : {
+    "Ice cannot display menu bar items for automatically hidden menu bars" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil 无法显示自动隐藏菜单栏的菜单栏项目"
+            "value" : "Ice 无法显示自动隐藏菜单栏的菜单栏项目"
           }
         }
       }
     },
-    "Veil cannot edit the appearance of automatically hidden menu bars" : {
+    "Ice cannot edit the appearance of automatically hidden menu bars" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil 无法编辑自动隐藏菜单栏的外观"
+            "value" : "Ice 无法编辑自动隐藏菜单栏的外观"
           }
         }
       }
     },
-    "Veil Diagnostic Report" : {
+    "Ice Diagnostic Report" : {
       "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil 诊断报告"
+            "value" : "Ice 诊断报告"
           }
         }
       }
     },
-    "Veil icon" : {
+    "Ice icon" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil 图标"
+            "value" : "Ice 图标"
           }
         }
       }
     },
-    "Veil Icon" : {
+    "Ice Icon" : {
       "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil 图标"
+            "value" : "Ice 图标"
           }
         }
       }
     },
-    "Veil needs permission to manage the menu bar." : {
+    "Ice needs permission to manage the menu bar." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil 需要权限来管理菜单栏。"
+            "value" : "Ice 需要权限来管理菜单栏。"
           }
         }
       }
     },
-    "Veil needs this to:" : {
+    "Ice needs this to:" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil 需要此权限来："
+            "value" : "Ice 需要此权限来："
           }
         }
       }
     },
-    "Veil Settings…" : {
+    "Ice Settings…" : {
       "comment" : "Context menu item to open settings\nRight-click menu item to open settings",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil 设置…"
+            "value" : "Ice 设置…"
           }
         }
       }
     },
-    "Veil Test Notification" : {
+    "Ice Test Notification" : {
       "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veil 测试通知"
+            "value" : "Ice 测试通知"
           }
         }
       }
@@ -2022,12 +2022,12 @@
         }
       }
     },
-    "You can still access Veil's settings by right-clicking an empty area in the menu bar" : {
+    "You can still access Ice's settings by right-clicking an empty area in the menu bar" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你仍然可以通过右键点击菜单栏空白区域来访问 Veil 设置"
+            "value" : "你仍然可以通过右键点击菜单栏空白区域来访问 Ice 设置"
           }
         }
       }

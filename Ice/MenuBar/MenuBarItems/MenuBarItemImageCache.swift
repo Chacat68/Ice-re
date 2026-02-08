@@ -32,7 +32,7 @@ final class MenuBarItemImageCache: ObservableObject {
     private var currentCacheSize: Int = 0
 
     /// Cache access queue for thread safety.
-    private let cacheQueue = DispatchQueue(label: "com.jordanteacher.Veil.imageCache", attributes: .concurrent)
+    private let cacheQueue = DispatchQueue(label: "com.jordanteacher.Ice.imageCache", attributes: .concurrent)
 
     /// The screen of the cached item images.
     private(set) var screen: NSScreen?

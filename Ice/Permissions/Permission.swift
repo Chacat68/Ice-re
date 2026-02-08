@@ -149,7 +149,7 @@ final class ScreenRecordingPermission: Permission {
                 NSLocalizedString("Display images of individual menu bar items.", comment: "Screen recording permission detail"),
             ],
             isRequired: false,
-            settingsURL: URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"),
+            settingsURL: URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenRecording"),
             check: {
                 ScreenCapture.checkPermissions()
             },

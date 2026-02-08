@@ -74,7 +74,7 @@ struct PermissionsView: View {
     private var explanationView: some View {
         IceSection {
             VStack {
-                Text("Veil needs permission to manage the menu bar.")
+                Text("Ice needs permission to manage the menu bar.")
                 Text("Absolutely no personal information is collected or stored.")
                     .bold()
                     .foregroundStyle(.red)
@@ -139,7 +139,7 @@ struct PermissionsView: View {
                     .underline()
 
                 VStack(spacing: 0) {
-                    Text("Veil needs this to:")
+                    Text("Ice needs this to:")
                         .font(.title3)
                         .bold()
 
@@ -180,7 +180,7 @@ struct PermissionsView: View {
                             font: .callout.bold()
                         ) {
                             Label {
-                                Text("Veil can work in a limited mode without this permission.")
+                                Text("Ice can work in a limited mode without this permission.")
                             } icon: {
                                 Image(systemName: "checkmark.shield")
                                     .foregroundStyle(.green)

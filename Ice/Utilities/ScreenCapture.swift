@@ -51,9 +51,9 @@ enum ScreenCapture {
 
     /// Requests screen capture permissions.
     static func requestPermissions() {
-        // SCShareableContent requires screen capture permissions, and triggers a request
-        // if the user doesn't have them.
-        SCShareableContent.getWithCompletionHandler { _, _ in }
+        // Use CGRequestScreenCaptureAccess() to trigger the system permission dialog.
+        // This is the standard API and works reliably across macOS versions.
+        CGRequestScreenCaptureAccess()
     }
 
     /// Captures a composite image of an array of windows using ScreenCaptureKit.
