@@ -157,7 +157,7 @@ final class MenuBarOverlayPanel: NSPanel {
                         if hasDoneInitialUpdate {
                             try await Task.sleep(for: .seconds(1))
                         } else {
-                            try await Task.sleep(for: .milliseconds(1))
+                            try await Task.sleep(for: .milliseconds(50))
                         }
                         continue
                     }

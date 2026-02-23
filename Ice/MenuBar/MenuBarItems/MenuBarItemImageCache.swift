@@ -31,9 +31,6 @@ final class MenuBarItemImageCache: ObservableObject {
     /// Current cache size in bytes.
     private var currentCacheSize: Int = 0
 
-    /// Cache access queue for thread safety.
-    private let cacheQueue = DispatchQueue(label: "com.jordanteacher.Ice.imageCache", attributes: .concurrent)
-
     /// The screen of the cached item images.
     private(set) var screen: NSScreen?
 
@@ -273,25 +270,21 @@ final class MenuBarItemImageCache: ObservableObject {
     private func setImageWithLRU(_ info: MenuBarItemInfo, _ image: CGImage) {
         let imageSize = estimateImageSize(image)
 
-        cacheQueue.async(flags: .barrier) { [weak self] in
-            guard let self else { return }
-
-            // Remove old entry if exists
-            if let oldEntry = self.cache[info] {
-                self.currentCacheSize -= estimateImageSize(oldEntry.image)
-            }
-
-            // Add new entry
-            let entry = CacheEntry(image: image)
-            self.cache[info] = entry
-            self.currentCacheSize += imageSize
-
-            // Evict LRU entries if cache is too large
-            self.evictLRUIfNeeded()
-
-            // Update published images
-            self.images[info] = image
+        // Remove old entry if exists
+        if let oldEntry = cache[info] {
+            currentCacheSize -= estimateImageSize(oldEntry.image)
         }
+
+        // Add new entry
+        let entry = CacheEntry(image: image)
+        cache[info] = entry
+        currentCacheSize += imageSize
+
+        // Evict LRU entries if cache is too large
+        evictLRUIfNeeded()
+
+        // Update published images
+        images[info] = image
     }
 
     /// Estimates the size of an image in bytes.
