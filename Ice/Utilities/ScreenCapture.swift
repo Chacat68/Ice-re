@@ -58,8 +58,6 @@ enum ScreenCapture {
 
     /// Captures a composite image of an array of windows.
     ///
-    /// This function uses CoreGraphics APIs and executes synchronously on the calling thread.
-    ///
     /// - Parameters:
     ///   - windowIDs: The identifiers of the windows to capture.
     ///   - screenBounds: The bounds to capture. Pass `nil` to capture the minimum rectangle that encloses the windows.
@@ -70,9 +68,10 @@ enum ScreenCapture {
         }
         let bounds = screenBounds ?? .null
         if windowIDs.count == 1 {
-            return CGWindowListCreateImage(bounds, .optionIncludingWindow, windowIDs[0], option)
+            // Use the C-level shim to avoid Swift's unavailability annotation on CGWindowListCreateImage.
+            return _CGWindowListCreateImage(bounds, .optionIncludingWindow, windowIDs[0], option)
         } else {
-            return CGWindowListCreateImageFromArray(bounds, windowIDs as CFArray, option)
+            return _CGWindowListCreateImageFromArray(bounds, windowIDs as CFArray, option)
         }
     }
 

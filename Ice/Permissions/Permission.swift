@@ -24,8 +24,8 @@ class Permission: ObservableObject, Identifiable {
     /// A Boolean value that indicates if the app can work without this permission.
     let isRequired: Bool
 
-    /// The URL of the settings pane to open.
-    private let settingsURL: URL?
+    /// Ordered list of candidate URLs for the settings pane; tried in sequence.
+    private let settingsURLs: [URL]
     /// The function that checks permissions.
     private let check: () -> Bool
     /// The function that requests permissions.
@@ -42,10 +42,30 @@ class Permission: ObservableObject, Identifiable {
     ///   - title: The title of the permission.
     ///   - details: Descriptive details for the permission.
     ///   - isRequired: A Boolean value that indicates if the app can work without this permission.
-    ///   - settingsURL: The URL of the settings pane to open.
+    ///   - settingsURLs: Ordered list of candidate URLs for the settings pane; the first one that
+    ///     successfully opens is used. Defaults to an empty list.
     ///   - check: A function that checks permissions.
     ///   - request: A function that requests permissions.
     init(
+        title: String,
+        details: [String],
+        isRequired: Bool,
+        settingsURLs: [URL] = [],
+        check: @escaping () -> Bool,
+        request: @escaping () -> Void
+    ) {
+        self.title = title
+        self.details = details
+        self.isRequired = isRequired
+        self.settingsURLs = settingsURLs
+        self.check = check
+        self.request = request
+        self.hasPermission = check()
+        configureCancellables()
+    }
+
+    /// Convenience initialiser accepting a single optional URL.
+    convenience init(
         title: String,
         details: [String],
         isRequired: Bool,
@@ -53,14 +73,14 @@ class Permission: ObservableObject, Identifiable {
         check: @escaping () -> Bool,
         request: @escaping () -> Void
     ) {
-        self.title = title
-        self.details = details
-        self.isRequired = isRequired
-        self.settingsURL = settingsURL
-        self.check = check
-        self.request = request
-        self.hasPermission = check()
-        configureCancellables()
+        self.init(
+            title: title,
+            details: details,
+            isRequired: isRequired,
+            settingsURLs: [settingsURL].compactMap { $0 },
+            check: check,
+            request: request
+        )
     }
 
     /// Sets up the internal observers for the permission.
@@ -79,8 +99,23 @@ class Permission: ObservableObject, Identifiable {
     /// Performs the request and opens the System Settings app to the appropriate pane.
     func performRequest() {
         request()
-        if let settingsURL {
-            NSWorkspace.shared.open(settingsURL)
+        openSettings()
+    }
+
+    /// Opens System Settings to the appropriate permissions pane,
+    /// trying each candidate URL in order and falling back to the generic
+    /// System Settings page if none succeed.
+    private func openSettings() {
+        let fallbacks: [URL] = [
+            URL(string: "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension"),
+            URL(string: "x-apple.systempreferences:com.apple.preference.security"),
+            URL(string: "x-apple.systempreferences:"),
+        ].compactMap { $0 }
+
+        for url in settingsURLs + fallbacks {
+            if NSWorkspace.shared.open(url) {
+                return
+            }
         }
     }
 
@@ -124,7 +159,12 @@ final class AccessibilityPermission: Permission {
                 NSLocalizedString("Arrange menu bar items.", comment: "Accessibility permission detail"),
             ],
             isRequired: true,
-            settingsURL: URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"),
+            settingsURLs: [
+                // Newer macOS (15+) format
+                URL(string: "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension?Privacy_Accessibility"),
+                // Legacy format (macOS 13/14)
+                URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"),
+            ].compactMap { $0 },
             check: {
                 // Use native macOS API to check accessibility permissions
                 AXIsProcessTrusted()
@@ -149,7 +189,7 @@ final class ScreenRecordingPermission: Permission {
                 NSLocalizedString("Display images of individual menu bar items.", comment: "Screen recording permission detail"),
             ],
             isRequired: false,
-            settingsURL: URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenRecording"),
+            settingsURLs: ScreenRecordingPermission.candidateSettingsURLs(),
             check: {
                 ScreenCapture.checkPermissions()
             },
@@ -157,5 +197,18 @@ final class ScreenRecordingPermission: Permission {
                 ScreenCapture.requestPermissions()
             }
         )
+    }
+
+    /// Returns an ordered list of candidate URLs for opening Screen Recording privacy settings.
+    /// The list covers macOS 15+ (Sequoia/26) new-style URLs first, then the legacy URL.
+    /// Note: The URL parameter is "ScreenCapture" (not "ScreenRecording") — this matches
+    /// Apple's internal identifier for the screen recording privacy pane.
+    private static func candidateSettingsURLs() -> [URL] {
+        [
+            // macOS 15+ (Sequoia / Tahoe) new settings URL format
+            "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension?Privacy_ScreenCapture",
+            // Legacy format (macOS 13/14) with correct identifier
+            "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture",
+        ].compactMap { URL(string: $0) }
     }
 }

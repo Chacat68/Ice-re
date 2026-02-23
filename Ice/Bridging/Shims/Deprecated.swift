@@ -9,6 +9,7 @@
 //
 
 import ApplicationServices
+import CoreGraphics
 
 // MARK: - Carbon Process Manager (Deprecated)
 
@@ -25,3 +26,27 @@ func GetProcessForPID(
     _ pid: pid_t,
     _ psn: inout ProcessSerialNumber
 ) -> OSStatus
+
+// MARK: - CGWindowList Image Capture (Swift-Unavailable Shims)
+
+/// Shim for `CGWindowListCreateImage`, which is marked unavailable in Swift on newer
+/// macOS SDKs but still exists as a C symbol in CoreGraphics.
+///
+/// - Important: Apple recommends migrating to ScreenCaptureKit. This shim is retained
+///   for synchronous, lightweight window captures that do not require full SCK permissions.
+@_silgen_name("CGWindowListCreateImage")
+func _CGWindowListCreateImage(
+    _ screenBounds: CGRect,
+    _ listOption: CGWindowListOption,
+    _ windowID: CGWindowID,
+    _ imageOption: CGWindowImageOption
+) -> CGImage?
+
+/// Shim for `CGWindowListCreateImageFromArray`, which is marked unavailable in Swift on
+/// newer macOS SDKs but still exists as a C symbol in CoreGraphics.
+@_silgen_name("CGWindowListCreateImageFromArray")
+func _CGWindowListCreateImageFromArray(
+    _ screenBounds: CGRect,
+    _ windowArray: CFArray,
+    _ imageOption: CGWindowImageOption
+) -> CGImage?
