@@ -910,6 +910,7 @@ extension MenuBarItemManager {
                     Logger.itemManager.debug("Menu bar item frame for \(item.logString) has changed to \(NSStringFromRect(currentFrame))")
                     return
                 }
+                try await Task.sleep(for: .milliseconds(5))
             }
         }
         do {
@@ -1161,6 +1162,7 @@ extension MenuBarItemManager {
                 if try await self.itemHasCorrectPosition(item: item, for: destination) {
                     return
                 }
+                try await Task.sleep(for: .milliseconds(10))
             }
         }
         do {

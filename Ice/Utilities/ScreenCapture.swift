@@ -77,7 +77,7 @@ enum ScreenCapture {
         var resultImage: CGImage?
         let semaphore = DispatchSemaphore(value: 0)
 
-        Task {
+        Task.detached {
             do {
                 let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: false)
 
