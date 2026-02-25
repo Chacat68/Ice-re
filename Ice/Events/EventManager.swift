@@ -15,6 +15,10 @@ final class EventManager {
     /// Storage for internal observers.
     private var cancellables = Set<AnyCancellable>()
 
+    /// The current show-on-hover task. Cancelled and replaced on each new hover event
+    /// to prevent multiple competing tasks from causing UI flicker.
+    private var showOnHoverTask: Task<Void, Never>?
+
     // MARK: Monitors
 
     /// Monitor for mouse down events.
@@ -365,12 +369,15 @@ extension EventManager {
 
         let delay = appState.settingsManager.advancedSettingsManager.showOnHoverDelay
 
-        Task {
+        // Cancel any previous hover task to prevent competing show/hide actions.
+        showOnHoverTask?.cancel()
+        showOnHoverTask = Task {
             if hiddenSection.isHidden {
                 guard self.isMouseInsideEmptyMenuBarSpace else {
                     return
                 }
                 try? await Task.sleep(for: .seconds(delay))
+                guard !Task.isCancelled else { return }
                 // Make sure the mouse is still inside.
                 guard self.isMouseInsideEmptyMenuBarSpace else {
                     return
@@ -384,6 +391,7 @@ extension EventManager {
                     return
                 }
                 try? await Task.sleep(for: .seconds(delay))
+                guard !Task.isCancelled else { return }
                 // Make sure the mouse is still outside.
                 guard
                     !self.isMouseInsideMenuBar,

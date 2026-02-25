@@ -286,7 +286,7 @@ extension WindowInfo {
 extension WindowInfo: Equatable {
     static func == (lhs: WindowInfo, rhs: WindowInfo) -> Bool {
         lhs.windowID == rhs.windowID &&
-        NSStringFromRect(lhs.frame) == NSStringFromRect(rhs.frame) &&
+        lhs.frame == rhs.frame &&
         lhs.title == rhs.title &&
         lhs.layer == rhs.layer &&
         lhs.alpha == rhs.alpha &&
@@ -304,7 +304,10 @@ extension WindowInfo: Equatable {
 extension WindowInfo: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(windowID)
-        hasher.combine(NSStringFromRect(frame))
+        hasher.combine(frame.origin.x)
+        hasher.combine(frame.origin.y)
+        hasher.combine(frame.size.width)
+        hasher.combine(frame.size.height)
         hasher.combine(title)
         hasher.combine(layer)
         hasher.combine(alpha)

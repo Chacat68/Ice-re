@@ -8,8 +8,6 @@ import SwiftUI
 
 @MainActor
 final class HotkeyRecorderModel: ObservableObject {
-    @EnvironmentObject private var appState: AppState
-
     @Published private(set) var isRecording = false
 
     @Published var isPresentingReservedByMacOSError = false

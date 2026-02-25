@@ -135,37 +135,18 @@ final class MenuBarItemImageCache: ObservableObject {
         let option: CGWindowImageOption = [.boundsIgnoreFraming, .bestResolution]
         let defaultItemThickness = NSStatusBar.system.thickness * backingScaleFactor
 
-        // First, try to get icons from app bundles (no screen recording permission needed)
-        let iconProvider = MenuBarItemIconProvider.shared
-        var itemsNeedingScreenshot = [MenuBarItem]()
-
-        for item in items {
-            if let bundleIcon = iconProvider.getIcon(for: item),
-                let cgImage = bundleIcon.cgImage(forProposedRect: nil, context: nil, hints: nil) {
-                images[item.info] = cgImage
-            } else {
-                // Mark for screenshot fallback
-                itemsNeedingScreenshot.append(item)
-            }
-        }
-
-        // If we have all icons from bundles, return early
-        if itemsNeedingScreenshot.isEmpty {
-            return images
-        }
-
-        // Fallback: Use screen capture for items without bundle icons
+        // Use screen capture to get the actual menu bar item images.
         var itemInfos = [CGWindowID: MenuBarItemInfo]()
         var itemFrames = [CGWindowID: CGRect]()
         var windowIDs = [CGWindowID]()
         var frame = CGRect.null
 
-        for item in itemsNeedingScreenshot {
+        for item in items {
             let windowID = item.windowID
             guard
                 // Use the most up-to-date window frame.
                 let itemFrame = Bridging.getWindowFrame(for: windowID),
-                itemFrame.minY == displayBounds.minY
+                abs(itemFrame.minY - displayBounds.minY) <= 2
             else {
                 continue
             }
@@ -177,7 +158,7 @@ final class MenuBarItemImageCache: ObservableObject {
 
         if
             let compositeImage = ScreenCapture.captureWindows(windowIDs, option: option),
-            CGFloat(compositeImage.width) == frame.width * backingScaleFactor
+            abs(CGFloat(compositeImage.width) - frame.width * backingScaleFactor) <= 2
         {
             for windowID in windowIDs {
                 guard

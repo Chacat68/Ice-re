@@ -15,7 +15,8 @@ final class ObjectStorage<Value> {
     /// - Note: Regardless of whether a value is stored with a strong or
     ///   weak reference, the association is made strongly. Weak references
     ///   are stored inside a `WeakReference` object.
-    private let policy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC
+    /// - Note: Uses `OBJC_ASSOCIATION_RETAIN` (atomic) for thread safety.
+    private let policy = objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN
 
     /// The key used for value lookup.
     ///

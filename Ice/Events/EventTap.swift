@@ -89,6 +89,9 @@ final class EventTap {
     private var machPort: CFMachPort?
     private var source: CFRunLoopSource?
 
+    /// The task for the current timeout, if any.
+    private var timeoutTask: Task<Void, any Error>?
+
     /// The label associated with the event tap.
     let label: String
 
@@ -226,7 +229,8 @@ final class EventTap {
     /// Enables the event tap with the given timeout.
     func enable(timeout: Duration, onTimeout: @escaping () -> Void) {
         enable()
-        Task { [weak self] in
+        timeoutTask?.cancel()
+        timeoutTask = Task { [weak self] in
             try await Task.sleep(for: timeout)
             if self?.isEnabled == true {
                 onTimeout()
@@ -236,6 +240,8 @@ final class EventTap {
 
     /// Disables the event tap.
     func disable() {
+        timeoutTask?.cancel()
+        timeoutTask = nil
         withUnwrappedComponents { runLoop, source, machPort in
             CFRunLoopRemoveSource(runLoop, source, mode)
             CGEvent.tapEnable(tap: machPort, enable: false)

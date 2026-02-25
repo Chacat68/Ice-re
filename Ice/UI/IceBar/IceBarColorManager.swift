@@ -52,9 +52,7 @@ final class IceBarColorManager: ObservableObject {
                 else {
                     return
                 }
-                DispatchQueue.main.async {
-                    self.updateColorInfo(with: frame, screen: screen)
-                }
+                self.updateColorInfo(with: frame, screen: screen)
             }
             .store(in: &c)
 
@@ -84,9 +82,7 @@ final class IceBarColorManager: ObservableObject {
                 }
                 updateWindowImage(for: screen)
                 if iceBarPanel.isVisible {
-                    DispatchQueue.main.async {
-                        self.updateColorInfo(with: iceBarPanel.frame, screen: screen)
-                    }
+                    self.updateColorInfo(with: iceBarPanel.frame, screen: screen)
                 }
             }
             .store(in: &c)

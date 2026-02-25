@@ -34,6 +34,5 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         case .chinese:
             UserDefaults.standard.set(["zh-Hans"], forKey: "AppleLanguages")
         }
-        UserDefaults.standard.synchronize()
     }
 }

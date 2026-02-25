@@ -63,6 +63,9 @@ final class AppState: ObservableObject {
     /// Storage for internal observers.
     private var cancellables = Set<AnyCancellable>()
 
+    /// Storage for window-specific observers, rebuilt when windows are assigned.
+    private var windowCancellables = Set<AnyCancellable>()
+
     /// A Boolean value that indicates whether the app is running as a SwiftUI preview.
     let isPreview: Bool = {
         #if DEBUG
@@ -82,7 +85,13 @@ final class AppState: ObservableObject {
     }
 
     /// Configures the internal observers for the app state.
+    /// This method only sets up core (window-independent) subscriptions once.
     private func configureCancellables() {
+        // Only configure core cancellables once to avoid dropping subscriptions.
+        guard cancellables.isEmpty else {
+            return
+        }
+
         var c = Set<AnyCancellable>()
 
         Publishers.Merge3(
@@ -118,20 +127,6 @@ final class AppState: ObservableObject {
                 navigationState.isAppFrontmost = frontmostApplication == .current
             }
             .store(in: &c)
-
-        if let settingsWindow {
-            settingsWindow.publisher(for: \.isVisible)
-                .debounce(for: 0.05, scheduler: DispatchQueue.main)
-                .sink { [weak self] isVisible in
-                    guard let self else {
-                        return
-                    }
-                    navigationState.isSettingsPresented = isVisible
-                }
-                .store(in: &c)
-        } else {
-            Logger.appState.debug("No settings window assigned yet")
-        }
 
         Publishers.Merge(
             navigationState.$isAppFrontmost,
@@ -182,9 +177,30 @@ final class AppState: ObservableObject {
         cancellables = c
     }
 
+    /// Configures window-dependent observers. Safe to call multiple times
+    /// as windows are assigned — only rebuilds the window-specific subscriptions.
+    private func configureWindowCancellables() {
+        var wc = Set<AnyCancellable>()
+
+        if let settingsWindow {
+            settingsWindow.publisher(for: \.isVisible)
+                .debounce(for: 0.05, scheduler: DispatchQueue.main)
+                .sink { [weak self] isVisible in
+                    guard let self else {
+                        return
+                    }
+                    navigationState.isSettingsPresented = isVisible
+                }
+                .store(in: &wc)
+        }
+
+        windowCancellables = wc
+    }
+
     /// Sets up the app state.
     func performSetup() {
         configureCancellables()
+        configureWindowCancellables()
         permissionsManager.stopAllChecks()
         menuBarManager.performSetup()
         appearanceManager.performSetup()
@@ -212,7 +228,7 @@ final class AppState: ObservableObject {
             return
         }
         settingsWindow = window
-        configureCancellables()
+        configureWindowCancellables()
     }
 
     /// Assigns the permissions window to the app state.
@@ -222,7 +238,6 @@ final class AppState: ObservableObject {
             return
         }
         permissionsWindow = window
-        configureCancellables()
     }
 
     /// Opens the settings window.
