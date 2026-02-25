@@ -24,7 +24,7 @@ class Permission: ObservableObject, Identifiable {
     /// A Boolean value that indicates if the app can work without this permission.
     let isRequired: Bool
 
-    /// Ordered list of candidate URLs for the settings pane; tried in sequence.
+    /// Ordered list of candidate URLs for the settings pane.
     private let settingsURLs: [URL]
     /// The function that checks permissions.
     private let check: () -> Bool
@@ -42,8 +42,8 @@ class Permission: ObservableObject, Identifiable {
     ///   - title: The title of the permission.
     ///   - details: Descriptive details for the permission.
     ///   - isRequired: A Boolean value that indicates if the app can work without this permission.
-    ///   - settingsURLs: Ordered list of candidate URLs for the settings pane; the first one that
-    ///     successfully opens is used. Defaults to an empty list.
+    ///   - settingsURLs: Ordered list of candidate URLs for the settings pane.
+    ///     A preferred URL is selected based on the current macOS version.
     ///   - check: A function that checks permissions.
     ///   - request: A function that requests permissions.
     init(
@@ -102,21 +102,38 @@ class Permission: ObservableObject, Identifiable {
         openSettings()
     }
 
-    /// Opens System Settings to the appropriate permissions pane,
-    /// trying each candidate URL in order and falling back to the generic
-    /// System Settings page if none succeed.
+    /// Opens System Settings to the appropriate permissions pane.
+    ///
+    /// The URL is selected based on the current macOS version instead of relying on
+    /// `NSWorkspace.open(_:)` to indicate whether a deep link's route is supported.
+    /// If opening the selected URL fails, it falls back to the generic System Settings page.
     private func openSettings() {
-        let fallbacks: [URL] = [
-            URL(string: "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension"),
-            URL(string: "x-apple.systempreferences:com.apple.preference.security"),
-            URL(string: "x-apple.systempreferences:"),
-        ].compactMap { $0 }
-
-        for url in settingsURLs + fallbacks {
+        for url in settingsURLsInPreferredOrder() {
             if NSWorkspace.shared.open(url) {
                 return
             }
         }
+
+        if let genericSettingsURL = URL(string: "x-apple.systempreferences:") {
+            NSWorkspace.shared.open(genericSettingsURL)
+        }
+    }
+
+    /// Returns candidate settings URLs ordered for the current macOS version.
+    private func settingsURLsInPreferredOrder() -> [URL] {
+        // The new Settings deep-link format is available on newer macOS versions.
+        // Prior versions generally use the legacy `com.apple.preference.*` format.
+        let majorVersion = ProcessInfo.processInfo.operatingSystemVersion.majorVersion
+        let prefersModernSettingsFormat = majorVersion >= 26
+
+        let preferredIdentifier = prefersModernSettingsFormat
+            ? "com.apple.settings."
+            : "com.apple.preference."
+
+        let preferred = settingsURLs.filter { $0.absoluteString.contains(preferredIdentifier) }
+        let nonPreferred = settingsURLs.filter { !$0.absoluteString.contains(preferredIdentifier) }
+
+        return preferred + nonPreferred
     }
 
     /// Asynchronously waits for the app to be granted this permission.
