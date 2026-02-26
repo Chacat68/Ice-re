@@ -4,7 +4,7 @@
 //
 
 import CoreGraphics
-import Foundation
+import ScreenCaptureKit
 
 /// A namespace for screen capture operations.
 enum ScreenCapture {
@@ -51,9 +51,13 @@ enum ScreenCapture {
 
     /// Requests screen capture permissions.
     static func requestPermissions() {
-        // Use CGRequestScreenCaptureAccess() to trigger the system permission dialog.
-        // This is the standard API and works reliably across macOS versions.
-        CGRequestScreenCaptureAccess()
+        if #available(macOS 15.0, *) {
+            // CGRequestScreenCaptureAccess() is broken on macOS 15. SCShareableContent requires
+            // screen capture permissions, and triggers a request if the user doesn't have them.
+            SCShareableContent.getWithCompletionHandler { _, _ in }
+        } else {
+            CGRequestScreenCaptureAccess()
+        }
     }
 
     /// Captures a composite image of an array of windows.
@@ -68,10 +72,18 @@ enum ScreenCapture {
         }
         let bounds = screenBounds ?? .null
         if windowIDs.count == 1 {
-            // Use the C-level shim to avoid Swift's unavailability annotation on CGWindowListCreateImage.
             return _CGWindowListCreateImage(bounds, .optionIncludingWindow, windowIDs[0], option)
         } else {
-            return _CGWindowListCreateImageFromArray(bounds, windowIDs as CFArray, option)
+            let pointer = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: windowIDs.count)
+            for (index, windowID) in windowIDs.enumerated() {
+                pointer[index] = UnsafeRawPointer(bitPattern: UInt(windowID))
+            }
+            guard let windowArray = CFArrayCreate(kCFAllocatorDefault, pointer, windowIDs.count, nil) else {
+                pointer.deallocate()
+                return nil
+            }
+            pointer.deallocate()
+            return _CGWindowListCreateImageFromArray(bounds, windowArray, option)
         }
     }
 

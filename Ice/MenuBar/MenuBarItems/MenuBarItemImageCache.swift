@@ -6,30 +6,10 @@
 import Cocoa
 import Combine
 
-/// Cache entry with access time tracking for LRU eviction.
-private struct CacheEntry {
-    let image: CGImage
-    var lastAccessed: Date
-
-    init(image: CGImage) {
-        self.image = image
-        self.lastAccessed = Date()
-    }
-}
-
-/// Cache for menu bar item images with LRU eviction policy.
+/// Cache for menu bar item images.
 final class MenuBarItemImageCache: ObservableObject {
-    /// The cached item images with access tracking.
+    /// The cached item images.
     @Published private(set) var images = [MenuBarItemInfo: CGImage]()
-
-    /// Internal cache with access tracking for LRU eviction.
-    private var cache = [MenuBarItemInfo: CacheEntry]()
-
-    /// Maximum cache size in bytes (approximately 50MB).
-    private let maxCacheSize: Int = 50 * 1024 * 1024
-
-    /// Current cache size in bytes.
-    private var currentCacheSize: Int = 0
 
     /// The screen of the cached item images.
     private(set) var screen: NSScreen?
@@ -237,62 +217,11 @@ final class MenuBarItemImageCache: ObservableObject {
         }
 
         await MainActor.run { [newImages] in
-            // Update cache with new images using LRU policy
-            for (info, image) in newImages {
-                setImageWithLRU(info, image)
-            }
+            images.merge(newImages) { (_, new) in new }
         }
 
         self.screen = screen
         self.menuBarHeight = screen.getMenuBarHeight()
-    }
-
-    /// Sets an image in the cache with LRU eviction policy.
-    private func setImageWithLRU(_ info: MenuBarItemInfo, _ image: CGImage) {
-        let imageSize = estimateImageSize(image)
-
-        // Remove old entry if exists
-        if let oldEntry = cache[info] {
-            currentCacheSize -= estimateImageSize(oldEntry.image)
-        }
-
-        // Add new entry
-        let entry = CacheEntry(image: image)
-        cache[info] = entry
-        currentCacheSize += imageSize
-
-        // Evict LRU entries if cache is too large
-        evictLRUIfNeeded()
-
-        // Update published images
-        images[info] = image
-    }
-
-    /// Estimates the size of an image in bytes.
-    private func estimateImageSize(_ image: CGImage) -> Int {
-        let bytesPerRow = image.bytesPerRow
-        let height = image.height
-        return bytesPerRow * height
-    }
-
-    /// Evicts least recently used cache entries if cache size exceeds limit.
-    private func evictLRUIfNeeded() {
-        guard currentCacheSize > maxCacheSize else { return }
-
-        // Sort entries by last accessed time
-        let sortedEntries = cache.sorted { $0.value.lastAccessed < $1.value.lastAccessed }
-
-        // Remove oldest entries until cache is under limit
-        for (info, entry) in sortedEntries {
-            if currentCacheSize <= maxCacheSize * 3 / 4 { // Target 75% of max size
-                break
-            }
-
-            let size = estimateImageSize(entry.image)
-            cache.removeValue(forKey: info)
-            images.removeValue(forKey: info)
-            currentCacheSize -= size
-        }
     }
 
     /// Updates the cache for the given sections, if necessary.

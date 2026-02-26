@@ -185,9 +185,7 @@ final class ControlItem {
         constraint?.publisher(for: \.isActive)
             .removeDuplicates()
             .sink { [weak self] isActive in
-                DispatchQueue.main.async {
-                    self?.isVisible = isActive
-                }
+                self?.isVisible = isActive
             }
             .store(in: &c)
 
@@ -214,18 +212,16 @@ final class ControlItem {
                     return
                 }
 
-                DispatchQueue.main.async {
-                    if isVisible {
-                        if
-                            let window = self.statusItem.button?.window,
-                            window.title != self.identifier.rawValue
-                        {
-                            window.title = self.identifier.rawValue
-                        }
-                        hotkey.enable()
-                    } else {
-                        hotkey.disable()
+                if isVisible {
+                    if
+                        let window = self.statusItem.button?.window,
+                        window.title != self.identifier.rawValue
+                    {
+                        window.title = self.identifier.rawValue
                     }
+                    hotkey.enable()
+                } else {
+                    hotkey.disable()
                 }
             }
             .store(in: &c)
@@ -239,9 +235,7 @@ final class ControlItem {
                 else {
                     return
                 }
-                DispatchQueue.main.async {
-                    self.windowFrame = frame
-                }
+                windowFrame = frame
             }
             .store(in: &c)
 
