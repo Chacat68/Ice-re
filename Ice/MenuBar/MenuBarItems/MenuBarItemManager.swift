@@ -1113,7 +1113,7 @@ extension MenuBarItemManager {
         do {
             try await executeMove(events: events, for: item)
         } catch {
-            await handleMoveFallback(events: events, for: item, originalError: error)
+            try await handleMoveFallback(events: events, for: item, originalError: error)
         }
     }
 
