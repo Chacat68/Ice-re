@@ -13,23 +13,20 @@ struct AboutSettingsPane: View {
         appState.updatesManager
     }
 
-    private var acknowledgementsURL: URL {
-        // swiftlint:disable:next force_unwrapping
-        Bundle.main.url(forResource: "Acknowledgements", withExtension: "pdf")!
+    private var acknowledgementsURL: URL? {
+        Bundle.main.url(forResource: "Acknowledgements", withExtension: "pdf")
     }
 
-    private var contributeURL: URL {
-        // swiftlint:disable:next force_unwrapping
-        URL(string: "https://github.com/jordanbaird/Ice")!
+    private var contributeURL: URL? {
+        URL(string: "https://github.com/jordanbaird/Ice")
     }
 
-    private var issuesURL: URL {
-        contributeURL.appendingPathComponent("issues")
+    private var issuesURL: URL? {
+        contributeURL?.appendingPathComponent("issues")
     }
 
-    private var donateURL: URL {
-        // swiftlint:disable:next force_unwrapping
-        URL(string: "https://icemenubar.app/Donate")!
+    private var donateURL: URL? {
+        URL(string: "https://icemenubar.app/Donate")
     }
 
     private var lastUpdateCheckString: String {
@@ -142,17 +139,29 @@ struct AboutSettingsPane: View {
             }
             Spacer()
             Button("Acknowledgements") {
-                NSWorkspace.shared.open(acknowledgementsURL)
+                if let url = acknowledgementsURL {
+                    NSWorkspace.shared.open(url)
+                }
             }
+            .disabled(acknowledgementsURL == nil)
             Button("Contribute") {
-                openURL(contributeURL)
+                if let url = contributeURL {
+                    openURL(url)
+                }
             }
+            .disabled(contributeURL == nil)
             Button("Report a Bug") {
-                openURL(issuesURL)
+                if let url = issuesURL {
+                    openURL(url)
+                }
             }
+            .disabled(issuesURL == nil)
             Button("Support Ice", systemImage: "heart.circle.fill") {
-                openURL(donateURL)
+                if let url = donateURL {
+                    openURL(url)
+                }
             }
+            .disabled(donateURL == nil)
         }
         .padding(8)
         .buttonStyle(BottomBarButtonStyle())

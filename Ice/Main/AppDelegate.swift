@@ -12,6 +12,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: NSApplicationDelegate Methods
 
     func applicationWillFinishLaunching(_ notification: Notification) {
+        // Check system compatibility early, before other operations.
+        Bridging.checkCompatibility()
+
         guard let appState else {
             Logger.appDelegate.warning("Missing app state in applicationWillFinishLaunching")
             return

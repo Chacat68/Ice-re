@@ -108,10 +108,8 @@ class Permission: ObservableObject, Identifiable {
     /// `NSWorkspace.open(_:)` to indicate whether a deep link's route is supported.
     /// If opening the selected URL fails, it falls back to the generic System Settings page.
     private func openSettings() {
-        for url in settingsURLsInPreferredOrder() {
-            if NSWorkspace.shared.open(url) {
-                return
-            }
+        for url in settingsURLsInPreferredOrder() where NSWorkspace.shared.open(url) {
+            return
         }
 
         if let genericSettingsURL = URL(string: "x-apple.systempreferences:") {
@@ -121,10 +119,10 @@ class Permission: ObservableObject, Identifiable {
 
     /// Returns candidate settings URLs ordered for the current macOS version.
     private func settingsURLsInPreferredOrder() -> [URL] {
-        // The new Settings deep-link format is available on newer macOS versions.
+        // The new Settings deep-link format is available on macOS 15+.
         // Prior versions generally use the legacy `com.apple.preference.*` format.
         let majorVersion = ProcessInfo.processInfo.operatingSystemVersion.majorVersion
-        let prefersModernSettingsFormat = majorVersion >= 26
+        let prefersModernSettingsFormat = majorVersion >= 15
 
         let preferredIdentifier = prefersModernSettingsFormat
             ? "com.apple.settings."

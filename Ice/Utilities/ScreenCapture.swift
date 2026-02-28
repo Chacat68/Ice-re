@@ -97,4 +97,3 @@ enum ScreenCapture {
         captureWindows([windowID], screenBounds: screenBounds, option: option)
     }
 }
-

@@ -9,6 +9,13 @@ import Combine
 /// Manager for menu bar items.
 @MainActor
 final class MenuBarItemManager: ObservableObject {
+    /// Constants for menu bar item movement.
+    private enum Constants {
+        /// Starting position for mouse drag operations.
+        /// This position is outside the screen bounds to ensure a clean drag gesture.
+        static let mouseDragStartPoint = CGPoint(x: 20_000, y: 20_000)
+    }
+
     /// Cache for menu bar items.
     struct ItemCache: Hashable {
         /// All cached menu bar items, keyed by section.
@@ -977,26 +984,26 @@ extension MenuBarItemManager {
         )
     }
 
-    /// Moves a menu bar item to the given destination, without restoring the mouse
-    /// pointer to its initial location.
+    /// Data structure to hold events needed for a menu bar item move operation.
+    private struct MoveEvents {
+        let mouseDown: CGEvent
+        let mouseUp: CGEvent
+        let fallback: CGEvent
+    }
+
+    /// Creates the events needed to move a menu bar item.
     ///
     /// - Parameters:
-    ///   - item: A menu bar item to move.
-    ///   - destination: A destination to move the menu bar item.
-    private func moveItemWithoutRestoringMouseLocation(_ item: MenuBarItem, to destination: MoveDestination) async throws {
-        itemMoveCount += 1
-        defer {
-            itemMoveCount -= 1
-        }
-
-        guard item.isMovable else {
-            throw EventError(code: .notMovable, item: item)
-        }
-        guard let source = CGEventSource(stateID: .hidSystemState) else {
-            throw EventError(code: .invalidEventSource, item: item)
-        }
-
-        let startPoint = CGPoint(x: 20_000, y: 20_000)
+    ///   - item: The item to move.
+    ///   - destination: The destination to move the item to.
+    ///   - source: The event source.
+    /// - Returns: The events needed for the move operation.
+    private func createMoveEvents(
+        for item: MenuBarItem,
+        to destination: MoveDestination,
+        source: CGEventSource
+    ) throws -> MoveEvents {
+        let startPoint = Constants.mouseDragStartPoint
         let endPoint = try getEndPoint(for: destination)
         let fallbackPoint = try getFallbackPoint(for: item)
         let targetItem = getTargetItem(for: destination)
@@ -1027,6 +1034,70 @@ extension MenuBarItemManager {
             throw EventError(code: .eventCreationFailure, item: item)
         }
 
+        return MoveEvents(mouseDown: mouseDownEvent, mouseUp: mouseUpEvent, fallback: fallbackEvent)
+    }
+
+    /// Executes the move operation using the provided events.
+    ///
+    /// - Parameters:
+    ///   - events: The events to use for the move.
+    ///   - item: The item being moved.
+    private func executeMove(events: MoveEvents, for item: MenuBarItem) async throws {
+        try await scrombleEvent(
+            events.mouseDown,
+            from: .pid(item.ownerPID),
+            to: .sessionEventTap,
+            waitingForFrameChangeOf: item
+        )
+        try await scrombleEvent(
+            events.mouseUp,
+            from: .pid(item.ownerPID),
+            to: .sessionEventTap,
+            waitingForFrameChangeOf: item
+        )
+    }
+
+    /// Handles fallback event posting when the primary move fails.
+    ///
+    /// - Parameters:
+    ///   - events: The move events containing the fallback event.
+    ///   - item: The item being moved.
+    ///   - originalError: The error that caused the fallback.
+    private func handleMoveFallback(events: MoveEvents, for item: MenuBarItem, originalError: Error) async throws {
+        do {
+            Logger.itemManager.debug("Posting fallback event for moving \(item.logString)")
+            try await postEventAndWaitToReceive(
+                events.fallback,
+                to: .sessionEventTap,
+                item: item
+            )
+        } catch {
+            Logger.itemManager.error("Failed to post fallback event for moving \(item.logString)")
+        }
+        throw originalError
+    }
+
+    /// Moves a menu bar item to the given destination, without restoring the mouse
+    /// pointer to its initial location.
+    ///
+    /// - Parameters:
+    ///   - item: A menu bar item to move.
+    ///   - destination: A destination to move the menu bar item.
+    private func moveItemWithoutRestoringMouseLocation(_ item: MenuBarItem, to destination: MoveDestination) async throws {
+        itemMoveCount += 1
+        defer {
+            itemMoveCount -= 1
+        }
+
+        guard item.isMovable else {
+            throw EventError(code: .notMovable, item: item)
+        }
+        guard let source = CGEventSource(stateID: .hidSystemState) else {
+            throw EventError(code: .invalidEventSource, item: item)
+        }
+
+        let events = try createMoveEvents(for: item, to: destination, source: source)
+
         try permitAllEvents(
             for: .combinedSessionState,
             during: [
@@ -1040,31 +1111,9 @@ extension MenuBarItemManager {
         lastItemMoveStartDate = .now
 
         do {
-            try await scrombleEvent(
-                mouseDownEvent,
-                from: .pid(item.ownerPID),
-                to: .sessionEventTap,
-                waitingForFrameChangeOf: item
-            )
-            try await scrombleEvent(
-                mouseUpEvent,
-                from: .pid(item.ownerPID),
-                to: .sessionEventTap,
-                waitingForFrameChangeOf: item
-            )
+            try await executeMove(events: events, for: item)
         } catch {
-            do {
-                Logger.itemManager.debug("Posting fallback event for moving \(item.logString)")
-                // Catch this, as we still want to throw the existing error if the fallback fails.
-                try await postEventAndWaitToReceive(
-                    fallbackEvent,
-                    to: .sessionEventTap,
-                    item: item
-                )
-            } catch {
-                Logger.itemManager.error("Failed to post fallback event for moving \(item.logString)")
-            }
-            throw error
+            await handleMoveFallback(events: events, for: item, originalError: error)
         }
     }
 
@@ -1551,7 +1600,12 @@ private enum MenuBarItemEventType {
 
 private extension CGEventField {
     /// Key to access a field that contains the event's window identifier.
-    static let windowID = CGEventField(rawValue: 0x33)! // swiftlint:disable:this force_unwrapping
+    /// Raw value 0x33 is the system-defined key for window ID in CGEvent.
+    static let windowID: CGEventField = {
+        // This should never fail as 0x33 is a valid system constant,
+        // but we provide a fallback to a standard field just in case.
+        CGEventField(rawValue: 0x33) ?? .eventSourceUserData
+    }()
 
     /// An array of integer event fields that can be used to compare menu bar item events.
     static let menuBarItemEventFields: [CGEventField] = [

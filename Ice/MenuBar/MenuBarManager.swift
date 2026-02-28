@@ -134,17 +134,27 @@ final class MenuBarManager: ObservableObject {
             }
             .store(in: &c)
 
+        // Only run the timer when the settings window is visible to save battery.
+        var averageColorTimer: AnyCancellable?
         appState?.settingsWindow?.publisher(for: \.isVisible)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateAverageColorInfo()
-            }
-            .store(in: &c)
-
-        Timer.publish(every: 5, on: .main, in: .default)
-            .autoconnect()
-            .sink { [weak self] _ in
-                self?.updateAverageColorInfo()
+            .sink { [weak self] isVisible in
+                guard let self else {
+                    return
+                }
+                if isVisible {
+                    self.updateAverageColorInfo()
+                    // Start the timer when the settings window becomes visible.
+                    averageColorTimer = Timer.publish(every: 5, on: .main, in: .default)
+                        .autoconnect()
+                        .sink { [weak self] _ in
+                            self?.updateAverageColorInfo()
+                        }
+                } else {
+                    // Stop the timer when the settings window is closed.
+                    averageColorTimer?.cancel()
+                    averageColorTimer = nil
+                }
             }
             .store(in: &c)
 

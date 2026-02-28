@@ -6,7 +6,54 @@
 import Cocoa
 
 /// A namespace for bridged functionality.
-enum Bridging { }
+enum Bridging {
+    /// Information about the current system version.
+    static let systemVersion: (major: Int, minor: Int, patch: Int) = {
+        let version = ProcessInfo.processInfo.operatingSystemVersion
+        return (version.majorVersion, version.minorVersion, version.patchVersion)
+    }()
+
+    /// The minimum macOS version required for full functionality.
+    /// Currently set to macOS 26.0 (macOS 26+) based on README requirements.
+    static let minimumSupportedVersion = (major: 26, minor: 0, patch: 0)
+
+    /// A Boolean value that indicates whether the current system version
+    /// is officially supported.
+    static var isSystemVersionSupported: Bool {
+        let current = systemVersion
+        if current.major > minimumSupportedVersion.major {
+            return true
+        }
+        if current.major == minimumSupportedVersion.major {
+            if current.minor > minimumSupportedVersion.minor {
+                return true
+            }
+            if current.minor == minimumSupportedVersion.minor {
+                return current.patch >= minimumSupportedVersion.patch
+            }
+        }
+        return false
+    }
+
+    /// Checks compatibility and logs warnings if private APIs may not work correctly.
+    static func checkCompatibility() {
+        if !isSystemVersionSupported {
+            Logger.bridging.warning(
+                """
+                Running on macOS \(systemVersion.major).\(systemVersion.minor).\(systemVersion.patch). \
+                This app is designed for macOS \(minimumSupportedVersion.major)+. \
+                Some features may not work correctly.
+                """
+            )
+        }
+
+        // Test if basic CGS functions are working
+        let connectionID = CGSMainConnectionID()
+        if connectionID == 0 {
+            Logger.bridging.error("CGSMainConnectionID returned 0. Private APIs may not be available.")
+        }
+    }
+}
 
 // MARK: - CGSConnection
 
